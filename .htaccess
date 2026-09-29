@@ -1,0 +1,22 @@
+Options -MultiViews -Indexes
+DirectoryIndex index.php
+
+RewriteEngine On
+
+# Keep configuration, data and logs out of reach.
+RewriteRule ^(includes|data|storage)(/|$) - [F,L]
+RewriteRule ^router\.php$ - [F,L]
+
+# /locations/lagos -> location.php?slug=lagos
+RewriteRule ^locations/([a-z0-9-]+)/?$ location.php?slug=$1 [L,QSA]
+
+# /about -> about.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([a-z0-9-]+)$ $1.php [L]
+
+# Anything else that does not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ 404.php [L]

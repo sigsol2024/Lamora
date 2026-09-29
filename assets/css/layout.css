@@ -1,0 +1,112 @@
+/* ---------------------------------------------------------------- Container */
+.container {
+    width: 100%;
+    max-width: calc(var(--max-width) + 2 * var(--margin));
+    margin-inline: auto;
+    padding-inline: var(--margin);
+}
+
+.section {
+    padding-block: var(--section);
+}
+
+.section--sm {
+    padding-block: var(--section-sm);
+}
+
+.section--flush-top {
+    padding-top: 0;
+}
+
+.section--flush-bottom {
+    padding-bottom: 0;
+}
+
+/* ---------------------------------------------------------------- 12-column grid
+ * Mobile: every child spans the full width.
+ * Desktop: .span-N sets width, .start-N sets the hang line.
+ */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--space-xl);
+}
+
+.grid > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+
+.align-end { align-self: end; }
+.align-center { align-self: center; }
+
+@media (min-width: 960px) {
+    .span-3 { grid-column: auto / span 3; }
+    .span-4 { grid-column: auto / span 4; }
+    .span-5 { grid-column: auto / span 5; }
+    .span-6 { grid-column: auto / span 6; }
+    .span-7 { grid-column: auto / span 7; }
+    .span-8 { grid-column: auto / span 8; }
+    .span-9 { grid-column: auto / span 9; }
+    .span-10 { grid-column: auto / span 10; }
+
+    .start-1 { grid-column-start: 1; }
+    .start-2 { grid-column-start: 2; }
+    .start-3 { grid-column-start: 3; }
+    .start-5 { grid-column-start: 5; }
+    .start-6 { grid-column-start: 6; }
+    .start-7 { grid-column-start: 7; }
+    .start-8 { grid-column-start: 8; }
+    .start-9 { grid-column-start: 9; }
+
+    .row-1 { grid-row: 1; }
+
+    .offset-down {
+        margin-top: clamp(3rem, 8vw, 9rem);
+    }
+}
+
+/* ---------------------------------------------------------------- Stacks */
+.stack > * + * {
+    margin-top: var(--space-m);
+}
+
+.stack-s > * + * {
+    margin-top: var(--space-s);
+}
+
+.stack-l > * + * {
+    margin-top: var(--space-l);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-m) var(--space-l);
+    margin-top: var(--space-l);
+}
+
+/* ---------------------------------------------------------------- Bleed
+ * Images that break the grid on one side only, to the viewport edge.
+ */
+@media (min-width: 960px) {
+    .bleed-left {
+        margin-left: calc(-1 * var(--margin));
+    }
+
+    .bleed-right {
+        margin-right: calc(-1 * var(--margin));
+    }
+}
+
+@media (min-width: 1680px) {
+    .bleed-left {
+        margin-left: calc(-1 * (100vw - var(--max-width)) / 2);
+    }
+
+    .bleed-right {
+        margin-right: calc(-1 * (100vw - var(--max-width)) / 2);
+    }
+}
