@@ -30,7 +30,7 @@ $navIndex = 0;
         </nav>
 
         <div class="site-header__actions">
-            <button class="btn btn--cream btn--small" type="button" data-open-booking>Book a Stay</button>
+            <button class="btn btn--small" type="button" data-open-booking>Book a Stay</button>
             <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
                 <span class="menu-toggle__label">Menu</span>
                 <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span></span>
@@ -45,7 +45,7 @@ $navIndex = 0;
                 <?php foreach (locations() as $navLoc): $navIndex++; ?>
                     <li>
                         <a class="locations-panel__link" href="<?= e(location_url($navLoc['slug'])) ?>">
-                            <?= hex_index(sprintf('%02d', $navIndex), 'hex-index--cream') ?>
+                            <?= hex_index(sprintf('%02d', $navIndex)) ?>
                             <span class="locations-panel__text">
                                 <span class="locations-panel__city"><?= e($navLoc['city']) ?></span>
                                 <span class="label label--muted"><?= e(status_label($navLoc)) ?></span>
@@ -54,7 +54,7 @@ $navIndex = 0;
                     </li>
                 <?php endforeach; ?>
                 <li class="locations-panel__more">
-                    <?= hex_index(sprintf('%02d', $navIndex + 1), 'hex-index--cream hex-index--faint') ?>
+                    <?= hex_index(sprintf('%02d', $navIndex + 1), 'hex-index--faint') ?>
                     <span class="label label--muted">More Nigerian cities to follow</span>
                 </li>
             </ul>
@@ -81,6 +81,6 @@ $navIndex = 0;
                 <li><a href="<?= e($item['href']) ?>"<?= $activeSlug === $item['slug'] ? ' aria-current="page"' : '' ?>><?= e($item['label']) ?></a></li>
             <?php endforeach; ?>
         </ul>
-        <button class="btn btn--cream" type="button" data-open-booking>Book a Stay</button>
+        <button class="btn" type="button" data-open-booking>Book a Stay</button>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * Location card. Every location uses the same structure and size; only the status
- * differs. Coming-soon locations show a Cream field with the hexagon pattern and no
+ * differs. Coming-soon locations show a plain field with the hexagon pattern and no
  * photography.
  *
  * @var array|null $loc    Location data, or null for the "more cities" tile.
@@ -14,18 +14,18 @@ $hexMark = '<svg class="location-card__visual-mark" viewBox="0 0 44 50" aria-hid
     <?php if ($loc === null): ?>
         <div class="location-card__visual location-card__visual--outline" aria-hidden="true"><?= $hexMark ?></div>
         <div class="location-card__body">
-            <?= hex_index($number, 'hex-index--cream hex-index--faint') ?>
+            <?= hex_index($number, 'hex-index--faint') ?>
             <h3 class="location-card__city">More cities</h3>
             <p class="label location-card__meta">To follow across Nigeria</p>
         </div>
 
     <?php elseif (($loc['status'] ?? '') === 'coming-soon'): ?>
-        <div class="location-card__visual location-card__visual--cream" aria-hidden="true">
+        <div class="location-card__visual location-card__visual--field" aria-hidden="true">
             <div class="hex-pattern"></div>
             <?= $hexMark ?>
         </div>
         <div class="location-card__body">
-            <?= hex_index($number, 'hex-index--cream') ?>
+            <?= hex_index($number) ?>
             <h3 class="location-card__city"><a href="<?= e(location_url($loc['slug'])) ?>"><?= e($loc['city']) ?></a></h3>
             <p class="label location-card__meta"><?= e(status_label($loc)) ?></p>
         </div>
@@ -35,7 +35,7 @@ $hexMark = '<svg class="location-card__visual-mark" viewBox="0 0 44 50" aria-hid
             <?= img($loc['slug'] . '.card', ['sizes' => '(min-width: 960px) 30vw, 100vw']) ?>
         </div>
         <div class="location-card__body">
-            <?= hex_index($number, 'hex-index--cream') ?>
+            <?= hex_index($number) ?>
             <h3 class="location-card__city"><a href="<?= e(location_url($loc['slug'])) ?>"><?= e($loc['city']) ?></a></h3>
             <p class="label location-card__meta"><?= e(($loc['district'] ?? '') !== '' ? $loc['district'] . ' / ' . status_label($loc) : status_label($loc)) ?></p>
         </div>

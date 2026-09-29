@@ -10,11 +10,12 @@ $description = $page['description'] !== '' ? $page['description'] : site('meta_d
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($fullTitle) ?></title>
     <meta name="description" content="<?= e($description) ?>">
-    <meta name="theme-color" content="#072163">
+    <meta name="theme-color" content="#FEFEFE">
     <meta property="og:site_name" content="<?= e(SITE_NAME) ?>">
     <meta property="og:title" content="<?= e($fullTitle) ?>">
     <meta property="og:description" content="<?= e($description) ?>">
-    <link rel="icon" href="<?= e(asset('img/brand/_dev/favicon.svg')) ?>" type="image/svg+xml">
+    <link rel="icon" href="<?= e(asset('img/brand/favicon-64.png')) ?>" type="image/png">
+    <link rel="apple-touch-icon" href="<?= e(asset('img/brand/apple-touch-icon.png')) ?>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

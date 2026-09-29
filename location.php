@@ -136,7 +136,7 @@ include INC . '/header.php';
     </section>
 
     <?php if (!empty($loc['presidential'])): $p = $loc['presidential']; ?>
-        <section class="presidential surface-navy" aria-labelledby="presidential-title">
+        <section class="presidential surface-mist" aria-labelledby="presidential-title">
             <div class="container">
                 <div class="grid presidential__grid">
                     <div class="span-6 bleed-left presidential__media reveal">
@@ -152,7 +152,7 @@ include INC . '/header.php';
                             <?php foreach ($p['config'] as $item): ?><li><?= e($item) ?></li><?php endforeach; ?>
                         </ul>
                         <div class="actions">
-                            <a class="btn btn--cream" href="<?= e(url('contact') . '?location=' . rawurlencode($loc['slug']) . '&type=reservation#enquiry') ?>">Enquire</a>
+                            <a class="btn" href="<?= e(url('contact') . '?location=' . rawurlencode($loc['slug']) . '&type=reservation#enquiry') ?>">Enquire</a>
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@ include INC . '/header.php';
                 ]); ?>
             </div>
             <?php
-            $surfaces = ['restaurant' => 'surface-white', 'vip_lounge' => 'surface-navy', 'coffee_shop' => 'surface-cream'];
+            $surfaces = ['restaurant' => 'surface-white', 'vip_lounge' => 'surface-mist', 'coffee_shop' => 'surface-cream'];
             $i = 0;
             foreach ($loc['outlets'] as $key => $outlet): $i++; $reverse = $i % 2 === 0; ?>
                 <article class="outlet <?= e($surfaces[$key] ?? 'surface-white') ?><?= $reverse ? ' outlet--reverse' : '' ?>" aria-labelledby="outlet-<?= e($key) ?>">
@@ -265,7 +265,7 @@ include INC . '/header.php';
     <?php endif; ?>
 
     <!-- Corporate advantage -->
-    <section class="section corporate-band surface-navy" aria-labelledby="corporate-title">
+    <section class="section corporate-band surface-mist" aria-labelledby="corporate-title">
         <div class="container">
             <div class="grid">
                 <div class="span-3 reveal">
@@ -361,7 +361,7 @@ include INC . '/header.php';
             <span class="booking-bar__city"><?= e(location_name($loc)) ?></span>
             <span class="label label--muted"><?= e(status_label($loc)) ?></span>
         </div>
-        <a class="btn btn--cream btn--small" href="<?= e(booking_url($loc)) ?>">Check availability</a>
+        <a class="btn btn--small" href="<?= e(booking_url($loc)) ?>">Check availability</a>
     </div>
 
 <?php endif; ?>

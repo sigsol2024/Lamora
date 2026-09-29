@@ -89,9 +89,7 @@ a {
     outline-offset: 3px;
 }
 
-.surface-navy :focus-visible,
-.site-header :focus-visible,
-.mobile-menu :focus-visible {
+.surface-navy :focus-visible {
     outline-color: var(--cream);
 }
 
@@ -209,9 +207,7 @@ a {
     color: var(--navy-muted);
 }
 
-.surface-navy .label--muted,
-.site-header .label--muted,
-.mobile-menu .label--muted {
+.surface-navy .label--muted {
     color: var(--cream-muted);
 }
 
@@ -252,6 +248,11 @@ a {
 
 .surface-cream {
     background: var(--cream);
+    color: var(--navy);
+}
+
+.surface-mist {
+    background: var(--mist);
     color: var(--navy);
 }
 

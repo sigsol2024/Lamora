@@ -11,13 +11,14 @@ const SITE_DOMAIN = 'thelamora.com';
 const BASE_URL_OVERRIDE = null;
 
 /*
- * Logo. PLACEHOLDER: the development placeholder is a neutral box marked "LOGO".
- * Replace with the supplied group artwork (SVG or transparent PNG) once issued.
+ * Logo: the hexagonal monogram on its Navy field, taken from the Brand Guidelines
+ * 2026 master artwork. The full lockup carries "LAGOS", so the group site uses the
+ * monogram alone. Replace with the approved production file (SVG) once issued.
  * Never recreate the logo in type.
  */
-const LOGO_GROUP = 'assets/img/brand/_dev/logo-placeholder.svg';
-const LOGO_GROUP_WIDTH  = 160;
-const LOGO_GROUP_HEIGHT = 64;
+const LOGO_GROUP = 'assets/img/brand/lamora-monogram.png';
+const LOGO_GROUP_WIDTH  = 246;
+const LOGO_GROUP_HEIGHT = 246;
 
 /*
  * Booking engine URLs per location. PLACEHOLDER: empty until the booking engine is

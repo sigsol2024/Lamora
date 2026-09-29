@@ -1,8 +1,8 @@
-<footer class="site-footer surface-navy">
-    <div class="site-footer__pattern hex-pattern hex-pattern--cream" aria-hidden="true"></div>
+<footer class="site-footer surface-mist">
+    <div class="site-footer__pattern hex-pattern" aria-hidden="true"></div>
     <div class="container site-footer__inner">
         <div class="site-footer__brand">
-            <a href="<?= e(url()) ?>" aria-label="<?= e(SITE_NAME) ?> - home">
+            <a class="site-footer__logo" href="<?= e(url()) ?>" aria-label="<?= e(SITE_NAME) ?> - home">
                 <img src="<?= e(asset(substr(LOGO_GROUP, strlen('assets/')))) ?>" alt="" width="<?= LOGO_GROUP_WIDTH ?>" height="<?= LOGO_GROUP_HEIGHT ?>">
             </a>
             <p class="site-footer__statement"><?= e(site('footer_statement')) ?></p>

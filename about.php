@@ -42,8 +42,8 @@ $values = site('values');
     </section>
 
     <!-- Vision and mission -->
-    <section class="section surface-navy purpose" aria-label="Vision and mission">
-        <div class="hex-pattern hex-pattern--cream purpose__pattern" aria-hidden="true"></div>
+    <section class="section surface-mist purpose" aria-label="Vision and mission">
+        <div class="hex-pattern purpose__pattern" aria-hidden="true"></div>
         <div class="container purpose__inner">
             <div class="grid">
                 <?php foreach (['vision' => 'Vision', 'mission' => 'Mission'] as $key => $label): ?>

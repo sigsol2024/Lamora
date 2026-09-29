@@ -54,8 +54,8 @@ $locationIndex = 0;
     </section>
 
     <!-- Locations -->
-    <section class="section surface-navy locations" id="locations" aria-labelledby="locations-title">
-        <div class="hex-pattern hex-pattern--cream locations__pattern" aria-hidden="true"></div>
+    <section class="section surface-mist locations" id="locations" aria-labelledby="locations-title">
+        <div class="hex-pattern locations__pattern" aria-hidden="true"></div>
         <div class="container locations__inner">
             <?php component('section-heading', [
                 'label' => 'Locations',

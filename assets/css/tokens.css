@@ -1,6 +1,7 @@
 /*
  * The Lamora design tokens, from the 2026 Brand Guidelines.
- * Three colours only: Navy leads, White creates space, Cream brings warmth.
+ * Three colours only. On the website White leads the page, Navy carries type,
+ * actions and the occasional statement band, and Cream brings warmth.
  * Tints are Navy or Cream at reduced opacity, never new colours.
  */
 :root {
@@ -8,6 +9,7 @@
     --navy: #072163;
     --white: #FEFEFE;
     --cream: #FBEFC9;
+    --mist: #F4F5F8;                     /* Navy at 4% on White: soft grey panels */
 
     --navy-muted: rgb(7 33 99 / 0.74);   /* secondary text on White/Cream (> 4.5:1) */
     --navy-line: rgb(7 33 99 / 0.16);    /* hairline rules on light surfaces */
