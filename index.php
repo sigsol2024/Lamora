@@ -14,16 +14,9 @@ $locationIndex = 0;
 ?>
 <main id="main">
 
-    <?php component('hero', [
-        'variant' => 'home',
-        'image'   => 'home.hero',
-        'label'   => SITE_NAME,
-        'title'   => copy_line('home_hero', SITE_NAME),
-        'lead'    => copy_line('home_hero_sub'),
-        'actions' => [
-            ['label' => 'Explore locations', 'href' => '#locations'],
-            ['label' => 'Book a stay', 'href' => '#locations', 'style' => 'link', 'attrs' => ['data-open-booking' => true]],
-        ],
+    <?php component('hero-slider', [
+        'slides'  => site('home_slides'),
+        'heading' => SITE_NAME . ': luxury serviced apartments in Nigeria',
     ]); ?>
 
     <div class="hero-strip">
@@ -53,6 +46,26 @@ $locationIndex = 0;
         </div>
     </section>
 
+    <!-- Featured apartments -->
+    <?php $featured = featured_suites(); if ($featured): ?>
+        <section class="section section--flush-top featured" id="featured" aria-labelledby="featured-title">
+            <div class="container">
+                <?php component('section-heading', [
+                    'label' => 'Featured apartments',
+                    'title' => site('featured_intro.title'),
+                    'intro' => site('featured_intro.text'),
+                    'split' => true,
+                    'id'    => 'featured-title',
+                ]); ?>
+                <?php component('apartment-carousel', [
+                    'suites' => $featured,
+                    'id'     => 'featured-track',
+                    'label'  => 'Featured apartments',
+                ]); ?>
+            </div>
+        </section>
+    <?php endif; ?>
+
     <!-- Locations -->
     <section class="section surface-mist locations" id="locations" aria-labelledby="locations-title">
         <div class="hex-pattern locations__pattern" aria-hidden="true"></div>
@@ -60,6 +73,7 @@ $locationIndex = 0;
             <?php component('section-heading', [
                 'label' => 'Locations',
                 'title' => 'Our locations',
+                'id'    => 'locations-title',
                 'intro' => 'Every Lamora location follows the same standard of privacy, space and service. Lagos opens first, with Abuja and further Nigerian cities to follow.',
                 'split' => true,
             ]); ?>
@@ -79,6 +93,7 @@ $locationIndex = 0;
             <?php component('section-heading', [
                 'label' => 'One address across the day',
                 'title' => copy_line('day_title'),
+                'id'    => 'day-title',
                 'split' => true,
             ]); ?>
             <?php component('day-strip', ['steps' => site('day')]); ?>

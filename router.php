@@ -11,6 +11,12 @@ if (preg_match('#^/(includes|data|storage)(/|$)#', $path)) {
 if ($path !== '/' && is_file(__DIR__ . $path)) {
     return false;
 }
+if (preg_match('#^/locations/([a-z0-9-]+)/suites/([a-z0-9-]+)/?$#', $path, $match)) {
+    $_GET['location'] = $match[1];
+    $_GET['suite'] = $match[2];
+    require __DIR__ . '/suite.php';
+    return true;
+}
 if (preg_match('#^/locations/([a-z0-9-]+)/?$#', $path, $match)) {
     $_GET['slug'] = $match[1];
     require __DIR__ . '/location.php';

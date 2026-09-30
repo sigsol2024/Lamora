@@ -7,11 +7,13 @@
  * @var string      $mode
  * @var string|null $location  Pre-selected location slug.
  * @var string|null $type      Pre-selected enquiry type.
+ * @var string|null $message   Pre-filled message.
  * @var string      $return    Local path to return to after submission.
  */
 $mode     = $mode ?? 'full';
 $location = $location ?? '';
 $type     = $type ?? '';
+$message  = $message ?? '';
 $state    = flash('enquiry') ?? [];
 $old      = $state['old'] ?? [];
 $errors   = $state['errors'] ?? [];
@@ -110,7 +112,7 @@ $invalid = static fn(string $key): string => empty($errors[$key]) ? '' : ' aria-
 
         <label class="field field--full">
             <span>Message<?= $mode === 'interest' ? ' (optional)' : '' ?></span>
-            <textarea class="textarea" name="message" rows="4"<?= $invalid('message') ?>><?= e($value('message')) ?></textarea>
+            <textarea class="textarea" name="message" rows="4"<?= $invalid('message') ?>><?= e($value('message', $message)) ?></textarea>
             <?= $error('message') ?>
         </label>
 

@@ -63,6 +63,7 @@ $values = site('values');
             <?php component('section-heading', [
                 'label' => 'Our values',
                 'title' => 'What we stand for.',
+                'id'    => 'values-title',
                 'split' => true,
                 'intro' => 'Six values shape how we host, whichever city you stay in.',
             ]); ?>

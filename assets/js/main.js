@@ -146,6 +146,170 @@
         });
     }
 
+    /* ------------------------------------------------------------ Hero slider */
+    $$('[data-slider]').forEach((slider) => {
+        const slides = $$('[data-slide]', slider);
+        const controls = $('[data-slider-controls]', slider);
+        if (slides.length < 2 || !controls) return;
+
+        const dots = $$('[data-slide-to]', slider);
+        const pauseButton = $('[data-slider-pause]', slider);
+        const duration = parseFloat(getComputedStyle(slider).getPropertyValue('--slide-duration')) || 7000;
+        let current = 0;
+        let timer = null;
+        let userPaused = reducedMotion;
+        let held = false;
+
+        controls.hidden = false;
+
+        const show = (index) => {
+            current = (index + slides.length) % slides.length;
+            slides.forEach((slide, i) => {
+                const active = i === current;
+                slide.classList.toggle('is-active', active);
+                slide.inert = !active;
+                if (active) slide.removeAttribute('aria-hidden');
+                else slide.setAttribute('aria-hidden', 'true');
+            });
+            dots.forEach((dot, i) => {
+                if (i === current) dot.setAttribute('aria-current', 'true');
+                else dot.removeAttribute('aria-current');
+            });
+            schedule();
+        };
+
+        const playing = () => !userPaused && !held && !document.hidden;
+
+        function schedule() {
+            clearTimeout(timer);
+            slider.dataset.state = playing() ? 'playing' : 'paused';
+            if (playing()) timer = setTimeout(() => show(current + 1), duration);
+        }
+
+        const hold = (value) => {
+            if (held === value) return;
+            held = value;
+            // Restart the progress line so it matches the fresh timer.
+            slider.dataset.state = 'paused';
+            void slider.offsetWidth;
+            schedule();
+        };
+
+        pauseButton?.addEventListener('click', () => {
+            userPaused = !userPaused;
+            pauseButton.setAttribute('aria-label', userPaused ? 'Play slideshow' : 'Pause slideshow');
+            schedule();
+        });
+        if (pauseButton && userPaused) pauseButton.setAttribute('aria-label', 'Play slideshow');
+
+        $('[data-slider-prev]', slider)?.addEventListener('click', () => show(current - 1));
+        $('[data-slider-next]', slider)?.addEventListener('click', () => show(current + 1));
+        dots.forEach((dot) => dot.addEventListener('click', () => show(Number(dot.dataset.slideTo))));
+
+        slider.addEventListener('mouseenter', () => hold(true));
+        slider.addEventListener('mouseleave', () => hold(slider.contains(document.activeElement)));
+        slider.addEventListener('focusin', () => hold(true));
+        slider.addEventListener('focusout', (event) => {
+            if (!slider.contains(event.relatedTarget)) hold(slider.matches(':hover'));
+        });
+        document.addEventListener('visibilitychange', schedule);
+
+        let touchX = null;
+        slider.addEventListener('touchstart', (event) => { touchX = event.touches[0].clientX; }, { passive: true });
+        slider.addEventListener('touchend', (event) => {
+            if (touchX === null) return;
+            const delta = event.changedTouches[0].clientX - touchX;
+            if (Math.abs(delta) > 50) show(current + (delta < 0 ? 1 : -1));
+            touchX = null;
+        });
+
+        show(0);
+    });
+
+    /* ------------------------------------------------------------ Apartment carousel */
+    $$('[data-carousel]').forEach((carousel) => {
+        const track = $('[data-carousel-track]', carousel);
+        const controls = $('[data-carousel-controls]', carousel);
+        const prev = $('[data-carousel-prev]', carousel);
+        const next = $('[data-carousel-next]', carousel);
+        const bar = $('[data-carousel-progress]', carousel);
+        if (!track || !controls) return;
+
+        const step = () => {
+            const item = track.firstElementChild;
+            const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+            return item ? item.getBoundingClientRect().width + gap : track.clientWidth;
+        };
+
+        const update = () => {
+            const max = track.scrollWidth - track.clientWidth;
+            controls.hidden = max <= 1;
+            if (max <= 1) return;
+            prev.disabled = track.scrollLeft <= 1;
+            next.disabled = track.scrollLeft >= max - 1;
+            if (bar) {
+                const visible = track.clientWidth / track.scrollWidth;
+                bar.style.width = (visible * 100) + '%';
+                bar.style.transform = 'translateX(' + ((track.scrollLeft / max) * (1 / visible - 1) * 100) + '%)';
+            }
+        };
+
+        const behavior = reducedMotion ? 'auto' : 'smooth';
+        prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior }));
+        next.addEventListener('click', () => track.scrollBy({ left: step(), behavior }));
+        track.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    });
+
+    /* ------------------------------------------------------------ Suite gallery lightbox */
+    const gallery = $('[data-gallery]');
+    const lightbox = $('[data-lightbox]');
+    if (gallery && lightbox && typeof lightbox.showModal === 'function') {
+        const photos = JSON.parse(gallery.dataset.gallery || '[]');
+        const image = $('[data-lightbox-image]', lightbox);
+        const caption = $('[data-lightbox-caption]', lightbox);
+        const count = $('[data-lightbox-count]', lightbox);
+        let index = 0;
+        let opener = null;
+
+        const render = () => {
+            const photo = photos[index];
+            image.src = photo.src;
+            image.alt = photo.alt;
+            caption.textContent = photo.alt;
+            count.textContent = (index + 1) + ' / ' + photos.length;
+        };
+        const go = (delta) => {
+            index = (index + delta + photos.length) % photos.length;
+            render();
+        };
+
+        $$('[data-gallery-open]', gallery).forEach((trigger) => {
+            trigger.hidden = false;
+            trigger.addEventListener('click', (event) => {
+                event.preventDefault();
+                opener = trigger;
+                index = Number(trigger.dataset.galleryOpen) || 0;
+                render();
+                lightbox.showModal();
+                document.body.classList.add('is-locked');
+            });
+        });
+
+        $('[data-lightbox-prev]', lightbox).addEventListener('click', () => go(-1));
+        $('[data-lightbox-next]', lightbox).addEventListener('click', () => go(1));
+        $('[data-lightbox-close]', lightbox).addEventListener('click', () => lightbox.close());
+        lightbox.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') go(-1);
+            if (event.key === 'ArrowRight') go(1);
+        });
+        lightbox.addEventListener('close', () => {
+            document.body.classList.remove('is-locked');
+            opener?.focus();
+        });
+    }
+
     /* ------------------------------------------------------------ Reveal on scroll */
     const revealItems = $$('.reveal');
     if (reducedMotion || !('IntersectionObserver' in window)) {

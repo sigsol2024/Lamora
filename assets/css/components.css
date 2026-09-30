@@ -39,9 +39,58 @@
     color: var(--cream);
 }
 
+/* On photography */
+.btn--light {
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--navy);
+}
+
+.btn--light:hover {
+    background: transparent;
+    color: var(--white);
+}
+
 .btn--small {
     min-height: 42px;
     padding: 0 1.25rem;
+}
+
+/* Circular icon control: sliders, carousels, lightbox */
+.round-button {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border: var(--rule) solid var(--navy-line);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--navy);
+    transition: background-color 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+}
+
+.round-button:hover:not(:disabled) {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+}
+
+.round-button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.round-button--light {
+    border-color: rgb(254 254 254 / 0.5);
+    background: transparent;
+    color: var(--white);
+}
+
+.round-button--light:hover:not(:disabled) {
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--navy);
 }
 
 .btn--block {
@@ -482,52 +531,198 @@
    Heroes
    ================================================================= */
 
-/* Homepage: full-width image with a White text panel anchored bottom-left */
-.hero-home {
+/* Homepage slider: full-width photograph, one title and one action per slide */
+.hero-slider {
+    --slide-duration: 7000ms;
     position: relative;
-    background: var(--white);
+    height: clamp(560px, calc(100svh - var(--header-h) - 64px), 920px);
+    overflow: hidden;
+    background: var(--navy);
+    color: var(--white);
 }
 
-.hero-home__media {
-    height: clamp(560px, calc(100svh - var(--header-h) - 64px), 940px);
+.hero-slider__slides,
+.hero-slider__slide {
+    position: absolute;
+    inset: 0;
 }
 
-.hero-home__overlay {
+.hero-slider__slide {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1200ms var(--ease), visibility 0s linear 1200ms;
+}
+
+.hero-slider__slide.is-active {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1200ms var(--ease), visibility 0s;
+}
+
+.hero-slider__media {
+    height: 100%;
+}
+
+.hero-slider__media img {
+    transform: scale(1.06);
+    transition: transform 8000ms var(--ease);
+}
+
+.hero-slider__slide.is-active .hero-slider__media img {
+    transform: none;
+}
+
+.hero-slider__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to top, rgb(7 33 99 / 0.66), rgb(7 33 99 / 0.12) 55%, rgb(7 33 99 / 0) 75%),
+        linear-gradient(to right, rgb(7 33 99 / 0.28), rgb(7 33 99 / 0) 60%);
+}
+
+.hero-slider__content {
     position: absolute;
     inset: auto 0 0 0;
+    padding-bottom: clamp(6.5rem, 11vw, 9rem);
 }
 
-.hero-home__panel {
-    width: min(100%, 640px);
-    padding: clamp(2rem, 4.2vw, 4.25rem) clamp(1.75rem, 4.2vw, 4.25rem) clamp(2rem, 3.6vw, 3.5rem);
-    margin-left: calc(-1 * clamp(1.75rem, 4.2vw, 4.25rem));
+.hero-slider__title {
+    max-width: 13em;
+    margin-bottom: var(--space-l);
+    color: var(--white);
+}
+
+.hero-slider__slide.is-active .hero-slider__title,
+.hero-slider__slide.is-active .btn {
+    animation: slide-in 1000ms var(--ease) both;
+}
+
+.hero-slider__slide.is-active .btn {
+    animation-delay: 150ms;
+}
+
+@keyframes slide-in {
+    from { opacity: 0; transform: translateY(16px); }
+}
+
+.hero-slider__controls {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+.hero-slider__controls-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+}
+
+.hero-slider__dots {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.hero-slider__dot {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border: 0;
+    background: none;
+    color: rgb(254 254 254 / 0.6);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+}
+
+.hero-slider__dot:hover,
+.hero-slider__dot[aria-current] {
+    color: var(--white);
+}
+
+.hero-slider__dot-line {
+    position: relative;
+    display: block;
+    width: 56px;
+    height: 1px;
+    background: rgb(254 254 254 / 0.35);
+}
+
+.hero-slider__dot-line span {
+    position: absolute;
+    inset: 0;
     background: var(--white);
-    color: var(--navy);
+    transform: scaleX(0);
+    transform-origin: left;
 }
 
-.hero-home__panel .h-hero {
-    margin-top: var(--space-m);
+.hero-slider__dot[aria-current] .hero-slider__dot-line span {
+    transform: none;
 }
 
-.hero-home__panel .lead {
-    margin-top: var(--space-m);
-    color: var(--navy-muted);
+.hero-slider[data-state="playing"] .hero-slider__dot[aria-current] .hero-slider__dot-line span {
+    animation: slide-progress var(--slide-duration) linear both;
+}
+
+@keyframes slide-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+.hero-slider__buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.hero-slider :focus-visible {
+    outline-color: var(--white);
+}
+
+.hero-slider[data-state="playing"] .round-button__play,
+.hero-slider:not([data-state="playing"]) .round-button__pause {
+    display: none;
 }
 
 @media (max-width: 959px) {
-    .hero-home__media {
-        height: 58svh;
-        min-height: 360px;
+    .hero-slider {
+        height: max(520px, calc(88svh - var(--header-h)));
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-slider__dots {
+        gap: 0.5rem;
     }
 
-    .hero-home__overlay {
-        position: static;
+    .hero-slider__dot-number {
+        display: none;
     }
 
-    .hero-home__panel {
-        width: 100%;
-        margin-left: 0;
-        padding: var(--space-l) 0 var(--space-xl);
+    .hero-slider__dot-line {
+        width: 28px;
+    }
+
+    .hero-slider__buttons .round-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-slider__slide,
+    .hero-slider__slide.is-active {
+        transition: none;
+    }
+
+    .hero-slider__media img,
+    .hero-slider__slide.is-active .hero-slider__title,
+    .hero-slider__slide.is-active .btn {
+        transform: none;
+        animation: none;
     }
 }
 
@@ -828,11 +1023,35 @@
     }
 }
 
+.suite-card {
+    position: relative;
+}
+
+.suite-card .media img {
+    transition: transform 1200ms var(--ease);
+}
+
+.suite-card:hover .media img {
+    transform: scale(1.03);
+}
+
 .suite-card__body {
     display: grid;
     gap: 0.75rem;
     padding-top: var(--space-m);
     max-width: 34em;
+}
+
+.suite-card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.suite-card:hover .suite-card__link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
 }
 
 .suite-card__meta {
@@ -844,6 +1063,172 @@
 
 .suite-card__ideal {
     color: var(--navy-muted);
+}
+
+.suite-card__more {
+    justify-self: start;
+    margin-top: 0.25rem;
+}
+
+/* =================================================================
+   Apartment cards & carousel (homepage featured, related suites)
+   Grey cards on White: the photograph, then the details.
+   ================================================================= */
+.apartment-carousel__track {
+    display: flex;
+    gap: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.apartment-carousel__track::-webkit-scrollbar {
+    display: none;
+}
+
+.apartment-carousel__item {
+    flex: 0 0 calc((100% - 2 * var(--gutter)) / 3);
+    scroll-snap-align: start;
+    display: flex;
+}
+
+@media (max-width: 1023px) {
+    .apartment-carousel__item {
+        flex-basis: calc((100% - var(--gutter)) / 2);
+    }
+}
+
+@media (max-width: 639px) {
+    .apartment-carousel__item {
+        flex-basis: 86%;
+    }
+}
+
+.apartment-carousel__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-l);
+    margin-top: var(--space-l);
+}
+
+.apartment-carousel__progress {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: var(--navy-line);
+}
+
+.apartment-carousel__progress span {
+    position: absolute;
+    top: -0.5px;
+    left: 0;
+    height: 2px;
+    background: var(--navy);
+    transition: transform 300ms var(--ease), width 300ms var(--ease);
+}
+
+.apartment-carousel__buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.apartment-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--mist);
+}
+
+.apartment-card__visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.apartment-card__visual .media {
+    height: 100%;
+}
+
+.apartment-card__visual img {
+    transition: transform 1200ms var(--ease);
+}
+
+.apartment-card:hover .apartment-card__visual img {
+    transform: scale(1.04);
+}
+
+.apartment-card__place {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--navy);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+}
+
+.apartment-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--space-m) var(--space-m) 1.75rem;
+}
+
+.apartment-card__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    line-height: 1.15;
+}
+
+.apartment-card__title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.apartment-card:hover .apartment-card__title a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+}
+
+.apartment-card__text {
+    color: var(--navy-muted);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+}
+
+.apartment-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: var(--rule) solid var(--navy-line);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums lining-nums;
+}
+
+.apartment-card__meta li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.apartment-card__more {
+    align-self: flex-start;
+    margin-top: 0.5rem;
 }
 
 /* =================================================================

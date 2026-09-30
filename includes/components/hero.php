@@ -1,7 +1,6 @@
 <?php
 /**
- * Hero, three variants.
- *   home  : full-width image with a White text panel anchored bottom-left.
+ * Hero for inner pages (the homepage uses hero-slider).
  *   split : White text column with an image bleeding to the right edge.
  *   plain : typographic header on a soft grey field with a faint hexagon accent.
  *
@@ -9,10 +8,10 @@
  * @var string      $label
  * @var string      $title
  * @var string|null $lead
- * @var string|null $image    Image slot (home, split).
+ * @var string|null $image    Image slot (split).
  * @var string|null $status   Small status line (split).
  * @var array|null  $actions  [['label', 'href', 'style' => 'primary'|'link', 'attrs' => []]]
- * @var string|null $title_class  Defaults to h-hero (home) or h1.
+ * @var string|null $title_class  Defaults to h1.
  */
 $variant = $variant ?? 'plain';
 $actions = $actions ?? [];
@@ -37,22 +36,7 @@ $renderActions = static function (array $actions): void {
     echo '</div>';
 };
 ?>
-<?php if ($variant === 'home'): ?>
-    <section class="hero-home" aria-labelledby="hero-title">
-        <?= img($image, ['class' => 'hero-home__media', 'priority' => true, 'sizes' => '100vw']) ?>
-        <div class="hero-home__overlay">
-            <div class="container">
-                <div class="hero-home__panel">
-                    <p class="label label--muted"><?= e($label) ?></p>
-                    <h1 class="<?= e($title_class ?? 'h-hero') ?>" id="hero-title"><?= e($title) ?></h1>
-                    <?php if ($lead): ?><p class="lead"><?= e($lead) ?></p><?php endif; ?>
-                    <?php $renderActions($actions); ?>
-                </div>
-            </div>
-        </div>
-    </section>
-
-<?php elseif ($variant === 'split'): ?>
+<?php if ($variant === 'split'): ?>
     <section class="hero-split" aria-labelledby="hero-title">
         <div class="container">
             <div class="grid hero-split__grid">

@@ -9,6 +9,8 @@ $page = [
 
 $presetLocation = location(query('location')) ? query('location') : '';
 $presetType = in_array(query('type'), ['reservation', 'corporate', 'dining', 'general'], true) ? query('type') : 'reservation';
+$presetSuite = $presetLocation !== '' ? suite(location($presetLocation), query('suite')) : null;
+$presetMessage = $presetSuite ? 'I would like to enquire about the ' . $presetSuite['name'] . '.' : '';
 
 include INC . '/head.php';
 include INC . '/header.php';
@@ -86,6 +88,7 @@ include INC . '/header.php';
                         'mode'     => 'full',
                         'location' => $presetLocation,
                         'type'     => $presetType,
+                        'message'  => $presetMessage,
                         'return'   => url('contact') . '#enquiry',
                     ]); ?>
                 </div>

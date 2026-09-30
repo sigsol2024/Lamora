@@ -124,18 +124,19 @@ include INC . '/header.php';
             <?php component('section-heading', [
                 'label' => 'The apartment collection',
                 'title' => $loc['suites_intro']['title'],
+                'id'    => 'suites-title',
                 'intro' => $loc['suites_intro']['text'],
                 'split' => true,
             ]); ?>
             <div class="suite-grid">
-                <?php foreach ($loc['suites'] as $suite): ?>
+                <?php foreach (location_suites($loc) as $suite): if (!empty($suite['flagship'])) continue; ?>
                     <?php component('suite-card', ['suite' => $suite]); ?>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <?php if (!empty($loc['presidential'])): $p = $loc['presidential']; ?>
+    <?php if (!empty($loc['presidential'])): $p = suite($loc, $loc['presidential']['slug']); ?>
         <section class="presidential surface-mist" aria-labelledby="presidential-title">
             <div class="container">
                 <div class="grid presidential__grid">
@@ -149,10 +150,11 @@ include INC . '/header.php';
                         <p class="lead presidential__role"><?= e($p['role']) ?></p>
                         <p class="muted"><?= e($p['text']) ?></p>
                         <ul class="rows presidential__config small">
-                            <?php foreach ($p['config'] as $item): ?><li><?= e($item) ?></li><?php endforeach; ?>
+                            <?php foreach ($p['highlights'] as $item): ?><li><?= e($item) ?></li><?php endforeach; ?>
                         </ul>
                         <div class="actions">
-                            <a class="btn" href="<?= e(url('contact') . '?location=' . rawurlencode($loc['slug']) . '&type=reservation#enquiry') ?>">Enquire</a>
+                            <a class="btn" href="<?= e(suite_url($p)) ?>">View the suite</a>
+                            <a class="link-arrow" href="<?= e(url('contact') . '?location=' . rawurlencode($loc['slug']) . '&type=reservation#enquiry') ?>">Enquire <?= icon('arrow-right') ?></a>
                         </div>
                     </div>
                 </div>
@@ -194,6 +196,7 @@ include INC . '/header.php';
                 <?php component('section-heading', [
                     'label' => 'Dining & social',
                     'title' => 'Three places to meet, dine and unwind.',
+                    'id'    => 'dining-title',
                     'intro' => 'Contemporary Afro-Fusion dining, a discreet VIP Lounge and a relaxed Coffee Shop.',
                     'split' => true,
                 ]); ?>
@@ -230,6 +233,7 @@ include INC . '/header.php';
                 <?php component('section-heading', [
                     'label' => 'Facilities',
                     'title' => 'Everything for work and rest, at one address.',
+                    'id'    => 'facilities-title',
                     'split' => true,
                 ]); ?>
 

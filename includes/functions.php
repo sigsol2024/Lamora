@@ -162,6 +162,67 @@ function interest_url(array $loc): string
     return location_url($loc['slug'], 'register');
 }
 
+/* ---------------------------------------------------------------- Suites */
+
+/** Every suite category at a location, flagship last, each tagged with its location slug. */
+function location_suites(array $loc): array
+{
+    $suites = $loc['suites'] ?? [];
+    if (!empty($loc['presidential'])) {
+        $suites[] = $loc['presidential'] + ['flagship' => true];
+    }
+    return array_map(fn(array $suite) => $suite + ['location' => $loc['slug']], $suites);
+}
+
+function suite(array $loc, string $slug): ?array
+{
+    foreach (location_suites($loc) as $suite) {
+        if (($suite['slug'] ?? '') === $slug) {
+            return $suite;
+        }
+    }
+    return null;
+}
+
+function suite_url(array $suite): string
+{
+    return url('locations/' . $suite['location'] . '/suites/' . $suite['slug']);
+}
+
+/**
+ * Homepage selection: up to $perLocation featured suites from every bookable
+ * location, interleaved so no single location fills the start of the carousel.
+ */
+function featured_suites(int $perLocation = 8): array
+{
+    $queues = [];
+    foreach (locations() as $loc) {
+        if (!is_bookable($loc)) {
+            continue;
+        }
+        $featured = array_filter(location_suites($loc), fn(array $s) => ($s['featured'] ?? true) && !empty($s['slug']));
+        $queues[] = array_slice(array_values($featured), 0, $perLocation);
+    }
+    $out = [];
+    for ($i = 0; $queues && $i < $perLocation; $i++) {
+        foreach ($queues as $queue) {
+            if (isset($queue[$i])) {
+                $out[] = $queue[$i];
+            }
+        }
+    }
+    return $out;
+}
+
+function bedroom_label(int $bedrooms): string
+{
+    return match (true) {
+        $bedrooms === 0 => 'Studio',
+        $bedrooms === 1 => '1 bedroom',
+        default         => $bedrooms . ' bedrooms',
+    };
+}
+
 /* ---------------------------------------------------------------- Media */
 
 /**
@@ -192,6 +253,13 @@ function img(string $slot, array $options = []): string
 
     $classes = trim('media ' . (isset($options['ratio']) ? 'media--' . $options['ratio'] : '') . ' ' . ($options['class'] ?? ''));
     return '<div class="' . e($classes) . '">' . $tag . '</div>';
+}
+
+/** Raw source and alt text for a slot, for scripts that load the full image (lightbox). */
+function img_data(string $slot): ?array
+{
+    $image = data('images')[$slot] ?? null;
+    return $image === null ? null : ['src' => asset('img/' . $image['file']), 'alt' => $image['alt'] ?? ''];
 }
 
 function icon(string $name, string $class = ''): string

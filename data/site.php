@@ -29,14 +29,29 @@ return [
      *         'draft'      = written for the website, needs approval.
      */
     'campaign_copy' => [
-        'home_hero'      => ['text' => 'Private comfort, beautifully considered.', 'source' => 'guidelines', 'approved' => false],
-        'home_hero_sub'  => ['text' => 'Luxury apartment hospitality across Nigeria.', 'source' => 'draft', 'approved' => false],
         'promise_title'  => ['text' => 'A private residence with hotel discipline.', 'source' => 'fact-sheet', 'approved' => false],
         'promise'        => ['text' => 'More privacy than a large hotel, more service than an independent apartment, and more utility than a conventional residence.', 'source' => 'fact-sheet', 'approved' => false],
         'day_title'      => ['text' => 'Stay, work, meet, dine and unwind without leaving the property.', 'source' => 'fact-sheet', 'approved' => false],
         'ways_title'     => ['text' => 'Stay for a night, a week or an extended period.', 'source' => 'guidelines', 'approved' => false],
         'audience_title' => ['text' => 'Commercially flexible. Operationally disciplined. Personally delivered.', 'source' => 'fact-sheet', 'approved' => false],
         'personal'       => ['text' => 'A more personal way to stay.', 'source' => 'guidelines', 'approved' => false],
+    ],
+
+    /*
+     * Homepage hero slides: one image, one title, one action each. Titles are draft
+     * lines written for the website from the client's brief and need approval.
+     * href: a path (resolved with url()) or an on-page anchor starting with '#'.
+     */
+    'home_slides' => [
+        ['title' => 'Luxury living, redefined.', 'image' => 'home.slide-living', 'action' => ['label' => 'View apartments', 'href' => '#featured']],
+        ['title' => 'Prime locations in Nigeria\'s leading cities.', 'image' => 'home.slide-locations', 'action' => ['label' => 'Explore locations', 'href' => '#locations']],
+        ['title' => 'Personalised service, discreetly delivered.', 'image' => 'home.slide-service', 'action' => ['label' => 'About The Lamora', 'href' => 'about']],
+        ['title' => 'Business travel, made effortless.', 'image' => 'home.slide-business', 'action' => ['label' => 'Corporate stays', 'href' => 'corporate-stays']],
+    ],
+
+    'featured_intro' => [
+        'title' => 'Space to live, work and host.',
+        'text'  => 'From studios to a four-bedroom Presidential Suite, every apartment is serviced to hotel standards.',
     ],
 
     'footer_statement' => 'Private, design-led apartment hospitality, delivered with hotel precision.',

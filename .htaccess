@@ -7,6 +7,9 @@ RewriteEngine On
 RewriteRule ^(includes|data|storage)(/|$) - [F,L]
 RewriteRule ^router\.php$ - [F,L]
 
+# /locations/lagos/suites/studio-suite -> suite.php?location=lagos&suite=studio-suite
+RewriteRule ^locations/([a-z0-9-]+)/suites/([a-z0-9-]+)/?$ suite.php?location=$1&suite=$2 [L,QSA]
+
 # /locations/lagos -> location.php?slug=lagos
 RewriteRule ^locations/([a-z0-9-]+)/?$ location.php?slug=$1 [L,QSA]
 

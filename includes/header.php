@@ -17,7 +17,7 @@ $navIndex = 0;
         <nav class="site-nav" aria-label="Main">
             <ul class="site-nav__list">
                 <li class="site-nav__item site-nav__item--locations">
-                    <button class="site-nav__link site-nav__toggle" type="button" aria-expanded="false" aria-controls="locations-panel" data-dropdown-toggle<?= $activeSlug === 'location' ? ' aria-current="true"' : '' ?>>
+                    <button class="site-nav__link site-nav__toggle" type="button" aria-expanded="false" aria-controls="locations-panel" data-dropdown-toggle<?= in_array($activeSlug, ['location', 'suite'], true) ? ' aria-current="true"' : '' ?>>
                         Locations <?= icon('chevron-down', 'icon--xs') ?>
                     </button>
                 </li>
