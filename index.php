@@ -24,19 +24,25 @@ $locationIndex = 0;
             <?php foreach (locations() as $loc): ?>
                 <a class="hero-strip__item" href="<?= e(location_url($loc['slug'])) ?>"><?= e($loc['city']) ?></a>
             <?php endforeach; ?>
-            <span class="hero-strip__item hero-strip__item--muted">More cities to follow</span>
+            <span class="hero-strip__item">
+                <button class="hero-strip__more" type="button" aria-describedby="more-cities-tip" data-tooltip>
+                    More cities
+                    <span class="tooltip" id="more-cities-tip" role="tooltip">Coming soon</span>
+                </button>
+            </span>
         </div>
     </div>
 
     <!-- The Lamora promise -->
     <section class="section promise" aria-labelledby="promise-title">
         <div class="container">
-            <div class="grid">
-                <div class="span-7 reveal">
-                    <p class="label label--muted">The Lamora</p>
-                    <h2 class="display promise__title" id="promise-title"><?= e(copy_line('promise_title')) ?></h2>
+            <div class="grid promise__grid">
+                <div class="span-6 promise__media reveal">
+                    <?= img('home.promise', ['sizes' => '(min-width: 960px) 45vw, 100vw']) ?>
                 </div>
-                <div class="span-4 start-9 align-end reveal">
+                <div class="span-6 promise__body reveal">
+                    <p class="label label--muted">The Lamora</p>
+                    <h2 class="h2 promise__title" id="promise-title"><?= e(copy_line('promise_title')) ?></h2>
                     <p class="lead promise__text"><?= e(copy_line('promise')) ?></p>
                     <div class="actions">
                         <a class="link-arrow" href="<?= e(url('about')) ?>">About The Lamora <?= icon('arrow-right') ?></a>
@@ -53,8 +59,6 @@ $locationIndex = 0;
                 <?php component('section-heading', [
                     'label' => 'Featured apartments',
                     'title' => site('featured_intro.title'),
-                    'intro' => site('featured_intro.text'),
-                    'split' => true,
                     'id'    => 'featured-title',
                 ]); ?>
                 <?php component('apartment-carousel', [
@@ -75,7 +79,6 @@ $locationIndex = 0;
                 'title' => 'Our locations',
                 'id'    => 'locations-title',
                 'intro' => 'Every Lamora location follows the same standard of privacy, space and service. Lagos opens first, with Abuja and further Nigerian cities to follow.',
-                'split' => true,
             ]); ?>
 
             <div class="location-grid">
@@ -106,7 +109,16 @@ $locationIndex = 0;
         <div class="container">
             <div class="grid ways__grid">
                 <div class="span-5 bleed-left ways__media reveal">
-                    <?= img('home.ways', ['ratio' => '4x5', 'sizes' => '(min-width: 960px) 40vw, 100vw']) ?>
+                    <?= img('home.ways', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 40vw, 100vw']) ?>
+                    <div class="ways__divider" aria-hidden="true">
+                        <svg viewBox="0 0 100 50">
+                            <path d="M14 25h15.5M70.5 25H86"/>
+                            <path d="M50 1.5 70.5 13.25v23.5L50 48.5 29.5 36.75v-23.5Z"/>
+                            <path class="ways__divider-core" d="M50 15.6 58.2 20.3v9.4L50 34.4l-8.2-4.7v-9.4Z"/>
+                            <path class="ways__divider-core" d="M10 20.4 14 22.7v4.6L10 29.6 6 27.3v-4.6ZM90 20.4 94 22.7v4.6L90 29.6 86 27.3v-4.6Z"/>
+                        </svg>
+                    </div>
+                    <?= img('home.ways-2', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 40vw, 100vw']) ?>
                 </div>
                 <div class="span-6 start-7 ways__text">
                     <div class="reveal">

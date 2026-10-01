@@ -17,6 +17,16 @@
     --cream-muted: rgb(251 239 201 / 0.76);
     --cream-line: rgb(251 239 201 / 0.2);
 
+    /* Gold sampled from the monogram (client request), for index numerals on Navy only. */
+    --logo-gold: #C8A93A;
+
+    /* Hover tints for the day strip only (client request). Soft enough for Navy text. */
+    --tint-blue: #E4EAF4;
+    --tint-sage: #E3ECE2;
+    --tint-sand: #F7EDCF;
+    --tint-clay: #F4E0D8;
+    --tint-apricot: #F7E5D1;
+
     /* Type */
     --font-display: "EB Garamond", Garamond, Georgia, serif;
     --font-sans: "Noto Sans", Arial, Aptos, sans-serif;

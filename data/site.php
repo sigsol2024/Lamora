@@ -19,6 +19,15 @@ return [
         'reservations' => 'reservations@thelamora.com',
     ],
 
+    // Icon ids refer to assets/icons/sprite.svg.
+    'social' => [
+        ['label' => 'Instagram', 'icon' => 'instagram', 'url' => 'https://www.instagram.com/thelamoralagos'],
+        ['label' => 'Facebook',  'icon' => 'facebook',  'url' => 'https://www.facebook.com/share/1DmdgU6SJ6/'],
+        ['label' => 'LinkedIn',  'icon' => 'linkedin',  'url' => 'https://www.linkedin.com/groups/42761003'],
+        ['label' => 'TikTok',    'icon' => 'tiktok',    'url' => 'https://www.tiktok.com/@thelamoralagos'],
+        ['label' => 'X',         'icon' => 'x',         'url' => 'https://x.com/thelamoralagos'],
+    ],
+
     /*
      * Campaign copy. NONE of these lines is an approved tagline. The guidelines state
      * that no official external tagline has been supplied; until Lamora approves a
@@ -51,7 +60,6 @@ return [
 
     'featured_intro' => [
         'title' => 'Space to live, work and host.',
-        'text'  => 'From studios to a four-bedroom Presidential Suite, every apartment is serviced to hotel standards.',
     ],
 
     'footer_statement' => 'Private, design-led apartment hospitality, delivered with hotel precision.',

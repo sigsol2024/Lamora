@@ -1,7 +1,7 @@
 <?php
 /**
- * Apartment card: image with the location on it, then title, description and
- * the key figures. The whole card links to the suite page.
+ * Apartment card: image with the location on it, then title and the key figures.
+ * The whole card links to the suite page.
  *
  * @var array $suite A suite from location_suites().
  */
@@ -16,7 +16,6 @@ $place   = trim(($cardLoc['district'] ?? '') . ', ' . ($cardLoc['city'] ?? ''), 
     <div class="apartment-card__body">
         <p class="label label--muted"><?= e(location_name($cardLoc)) ?></p>
         <h3 class="apartment-card__title"><a href="<?= e(suite_url($suite)) ?>"><?= e($suite['name']) ?></a></h3>
-        <p class="apartment-card__text"><?= e($suite['role']) ?></p>
         <ul class="apartment-card__meta" aria-label="Key details">
             <li><?= icon('users', 'icon--s') ?>Up to <?= (int) $suite['guests'] ?> guests</li>
             <li><?= icon('bed', 'icon--s') ?><?= e(bedroom_label((int) ($suite['bedrooms'] ?? 0))) ?></li>

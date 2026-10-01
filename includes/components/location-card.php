@@ -1,43 +1,30 @@
 <?php
 /**
  * Location card. Every location uses the same structure and size; only the status
- * differs. Coming-soon locations show a plain field with the hexagon pattern and no
- * photography.
+ * differs. Coming-soon locations and the "more cities" tile show a blurred
+ * photograph labelled "Coming soon".
  *
  * @var array|null $loc    Location data, or null for the "more cities" tile.
  * @var int        $index
  */
 $number = sprintf('%02d', $index);
-$hexMark = '<svg class="location-card__visual-mark" viewBox="0 0 44 50" aria-hidden="true"><path d="M22 1.5 42.5 13.25v23.5L22 48.5 1.5 36.75v-23.5Z"/></svg>';
+$soon   = $loc === null || ($loc['status'] ?? '') === 'coming-soon';
+$slot   = $loc === null ? 'home.more-cities' : $loc['slug'] . '.card';
 ?>
-<article class="location-card reveal">
-    <?php if ($loc === null): ?>
-        <div class="location-card__visual location-card__visual--outline" aria-hidden="true"><?= $hexMark ?></div>
-        <div class="location-card__body">
-            <?= hex_index($number, 'hex-index--faint') ?>
+<article class="location-card reveal<?= $soon ? ' location-card--soon' : '' ?>">
+    <div class="location-card__visual"<?= $soon ? ' aria-hidden="true"' : '' ?>>
+        <?= img($slot, ['sizes' => '(min-width: 960px) 30vw, 100vw']) ?>
+        <?php if ($soon): ?><span class="location-card__soon">Coming soon</span><?php endif; ?>
+    </div>
+    <div class="location-card__body">
+        <?php if ($loc === null): ?>
+            <?= hex_index($number, 'hex-index--solid') ?>
             <h3 class="location-card__city">More cities</h3>
             <p class="label location-card__meta">To follow across Nigeria</p>
-        </div>
-
-    <?php elseif (($loc['status'] ?? '') === 'coming-soon'): ?>
-        <div class="location-card__visual location-card__visual--field" aria-hidden="true">
-            <div class="hex-pattern"></div>
-            <?= $hexMark ?>
-        </div>
-        <div class="location-card__body">
-            <?= hex_index($number) ?>
+        <?php else: ?>
+            <?= hex_index($number, 'hex-index--solid') ?>
             <h3 class="location-card__city"><a href="<?= e(location_url($loc['slug'])) ?>"><?= e($loc['city']) ?></a></h3>
-            <p class="label location-card__meta"><?= e(status_label($loc)) ?></p>
-        </div>
-
-    <?php else: ?>
-        <div class="location-card__visual">
-            <?= img($loc['slug'] . '.card', ['sizes' => '(min-width: 960px) 30vw, 100vw']) ?>
-        </div>
-        <div class="location-card__body">
-            <?= hex_index($number) ?>
-            <h3 class="location-card__city"><a href="<?= e(location_url($loc['slug'])) ?>"><?= e($loc['city']) ?></a></h3>
-            <p class="label location-card__meta"><?= e(($loc['district'] ?? '') !== '' ? $loc['district'] . ' / ' . status_label($loc) : status_label($loc)) ?></p>
-        </div>
-    <?php endif; ?>
+            <p class="label location-card__meta"><?= e(!$soon && ($loc['district'] ?? '') !== '' ? $loc['district'] . ' / ' . status_label($loc) : status_label($loc)) ?></p>
+        <?php endif; ?>
+    </div>
 </article>

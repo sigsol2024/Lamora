@@ -16,7 +16,12 @@
 
 return [
     // Group homepage
+    'home.promise'     => ['file' => 'placeholder/rooms/executive/silkwood-171.jpg', 'alt' => 'A suite living room with soft seating, a round table and a kitchenette', 'focus' => '50% 55%'],
     'home.ways'        => ['file' => 'placeholder/rooms/executive/silkwood-173.jpg', 'alt' => 'A suite living room opening onto the bedroom', 'focus' => '50% 55%'],
+    'home.ways-2'      => ['file' => 'placeholder/reception/silkwood-99.jpg', 'alt' => 'A dining room laid with timber tables and daylight from tall windows', 'focus' => '50% 55%'],
+    // Shown blurred behind "Coming soon" on the location cards
+    'home.more-cities' => ['file' => 'placeholder/outdoor/silkwoodikeja-7c.jpg', 'alt' => '', 'focus' => '50% 50%'],
+    'abuja.card'       => ['file' => 'placeholder/outdoor/silkwoodikeja-5.jpg', 'alt' => '', 'focus' => '50% 50%'],
 
     // Homepage hero slides
     'home.slide-living'    => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-209.jpg', 'alt' => 'A made bed with cream linen and warm reading lamps against a navy and gold wall', 'focus' => '55% 60%'],

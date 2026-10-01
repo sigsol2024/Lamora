@@ -12,13 +12,96 @@
 /* =================================================================
    Group homepage
    ================================================================= */
+
+/* Tighter vertical rhythm on the homepage: 72px, 52px on tablets, 40px on phones */
+.page-home main {
+    --section: 72px;
+    --section-sm: 56px;
+}
+
+.page-home .section-head {
+    margin-bottom: var(--space-l);
+}
+
+@media (max-width: 1023px) {
+    .page-home main {
+        --section: 52px;
+        --section-sm: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-home main {
+        --section: 40px;
+        --section-sm: 36px;
+    }
+
+    .page-home .section-head {
+        margin-bottom: var(--space-m);
+    }
+}
+/* Promise: photograph left, title and text right, equal columns */
+.promise__grid {
+    align-items: center;
+}
+
+/* A Mist panel offset behind the photograph, showing past its bottom-right edges */
+.promise__media {
+    --offset: clamp(12px, 1.6vw, 24px);
+    position: relative;
+    margin-right: var(--offset);
+    margin-bottom: var(--offset);
+}
+
+.promise__media::before {
+    content: "";
+    position: absolute;
+    inset: var(--offset) calc(var(--offset) * -1) calc(var(--offset) * -1) var(--offset);
+    background: var(--mist);
+}
+
+.promise__media .media {
+    position: relative;
+    aspect-ratio: 5 / 4;
+}
+
 .promise__title {
     margin-top: var(--space-m);
     max-width: 12em;
 }
 
 .promise__text {
+    margin-top: var(--space-m);
     color: var(--navy-muted);
+    max-width: 30em;
+}
+
+@media (min-width: 960px) {
+    .promise__body {
+        padding-left: clamp(1rem, 4vw, 4.5rem);
+    }
+}
+
+@media (max-width: 767px) {
+    .promise__text {
+        font-size: var(--fs-small);
+        line-height: 1.6;
+        text-wrap: pretty;
+    }
+}
+
+/* Intro sits under the title, two lines on desktop */
+.locations .section-head__intro {
+    max-width: 50em;
+    text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+    .locations .section-head__intro {
+        font-size: var(--fs-small);
+        line-height: 1.6;
+        text-wrap: pretty;
+    }
 }
 
 /* Locations: navy band, hexagon accent confined to the top-right corner */
@@ -50,9 +133,58 @@
     row-gap: 0;
 }
 
+/* Two photographs stacked, separated by a hexagon divider */
+.ways__media {
+    display: flex;
+    flex-direction: column;
+}
+
+.ways__divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: clamp(56px, 6vw, 80px);
+    color: var(--navy);
+}
+
+.ways__divider::before,
+.ways__divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+}
+
+.ways__divider::before {
+    background: linear-gradient(to right, rgb(7 33 99 / 0), var(--navy-line) 30%, rgb(7 33 99 / 0.45));
+}
+
+.ways__divider::after {
+    background: linear-gradient(to left, rgb(7 33 99 / 0), var(--navy-line) 30%, rgb(7 33 99 / 0.45));
+}
+
+.ways__divider svg {
+    flex: none;
+    width: 92px;
+    height: 46px;
+    margin-inline: 0.75rem;
+}
+
+.ways__divider path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+}
+
+.ways__divider .ways__divider-core {
+    fill: currentColor;
+    stroke: none;
+}
+
 @media (min-width: 960px) {
     .ways__media .media {
-        height: 100%;
+        flex: 1;
+        min-height: 0;
         aspect-ratio: auto;
     }
 }

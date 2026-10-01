@@ -13,8 +13,8 @@ const BASE_URL_OVERRIDE = null;
 /*
  * Logo: the hexagonal monogram on its Navy field, taken from the Brand Guidelines
  * 2026 master artwork. The full lockup carries "LAGOS", so the group site uses the
- * monogram alone. Replace with the approved production file (SVG) once issued.
- * Never recreate the logo in type.
+ * monogram, cut to a hexagon, beside "The Lamora" set in type (client request; see
+ * components/logo.php). Replace with the approved production file (SVG) once issued.
  */
 const LOGO_GROUP = 'assets/img/brand/lamora-monogram.png';
 const LOGO_GROUP_WIDTH  = 246;

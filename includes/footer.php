@@ -2,10 +2,18 @@
     <div class="site-footer__pattern hex-pattern" aria-hidden="true"></div>
     <div class="container site-footer__inner">
         <div class="site-footer__brand">
-            <a class="site-footer__logo" href="<?= e(url()) ?>" aria-label="<?= e(SITE_NAME) ?> - home">
-                <img src="<?= e(asset(substr(LOGO_GROUP, strlen('assets/')))) ?>" alt="" width="<?= LOGO_GROUP_WIDTH ?>" height="<?= LOGO_GROUP_HEIGHT ?>">
-            </a>
+            <?php component('logo', ['class' => 'site-footer__logo']); ?>
             <p class="site-footer__statement"><?= e(site('footer_statement')) ?></p>
+            <ul class="social" aria-label="The Lamora on social media">
+                <?php foreach (site('social') as $social): ?>
+                    <li>
+                        <a class="social__link" href="<?= e($social['url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($social['label']) ?> (opens in a new tab)">
+                            <svg class="social__hex" viewBox="0 0 44 50" aria-hidden="true" focusable="false"><path d="M22 1.5 42.5 13.25v23.5L22 48.5 1.5 36.75v-23.5Z"/></svg>
+                            <?= icon($social['icon']) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         </div>
 
         <div class="site-footer__col">

@@ -2,7 +2,7 @@
 /**
  * Homepage hero slider: full-width image, one title and one action per slide.
  * Without JavaScript the first slide shows on its own. Autoplay pauses on hover,
- * on focus and with the pause button, and is off for reduced-motion users.
+ * focus and touch, and is off for reduced-motion users.
  *
  * @var array  $slides [['title', 'image', 'action' => ['label', 'href']]]
  * @var string $heading Visually hidden page heading.
@@ -40,10 +40,6 @@ $count  = count($slides);
                     <?php endforeach; ?>
                 </div>
                 <div class="hero-slider__buttons">
-                    <button class="round-button round-button--light" type="button" aria-label="Pause slideshow" data-slider-pause>
-                        <?= icon('pause', 'icon--s round-button__pause') ?>
-                        <?= icon('play', 'icon--s round-button__play') ?>
-                    </button>
                     <button class="round-button round-button--light" type="button" aria-label="Previous slide" data-slider-prev>
                         <?= icon('arrow-left', 'icon--s') ?>
                     </button>

@@ -146,6 +146,22 @@
         });
     }
 
+    /* ------------------------------------------------------------ Tooltips (tap to toggle) */
+    $$('[data-tooltip]').forEach((trigger) => {
+        trigger.addEventListener('click', () => trigger.classList.toggle('is-open'));
+        trigger.addEventListener('blur', () => trigger.classList.remove('is-open', 'is-dismissed'));
+        trigger.addEventListener('pointerleave', () => trigger.classList.remove('is-dismissed'));
+        document.addEventListener('click', (event) => {
+            if (!trigger.contains(event.target)) trigger.classList.remove('is-open');
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                trigger.classList.remove('is-open');
+                trigger.classList.add('is-dismissed');
+            }
+        });
+    });
+
     /* ------------------------------------------------------------ Hero slider */
     $$('[data-slider]').forEach((slider) => {
         const slides = $$('[data-slide]', slider);
@@ -153,11 +169,9 @@
         if (slides.length < 2 || !controls) return;
 
         const dots = $$('[data-slide-to]', slider);
-        const pauseButton = $('[data-slider-pause]', slider);
         const duration = parseFloat(getComputedStyle(slider).getPropertyValue('--slide-duration')) || 7000;
         let current = 0;
         let timer = null;
-        let userPaused = reducedMotion;
         let held = false;
 
         controls.hidden = false;
@@ -178,7 +192,7 @@
             schedule();
         };
 
-        const playing = () => !userPaused && !held && !document.hidden;
+        const playing = () => !reducedMotion && !held && !document.hidden;
 
         function schedule() {
             clearTimeout(timer);
@@ -195,19 +209,12 @@
             schedule();
         };
 
-        pauseButton?.addEventListener('click', () => {
-            userPaused = !userPaused;
-            pauseButton.setAttribute('aria-label', userPaused ? 'Play slideshow' : 'Pause slideshow');
-            schedule();
-        });
-        if (pauseButton && userPaused) pauseButton.setAttribute('aria-label', 'Play slideshow');
-
         $('[data-slider-prev]', slider)?.addEventListener('click', () => show(current - 1));
         $('[data-slider-next]', slider)?.addEventListener('click', () => show(current + 1));
         dots.forEach((dot) => dot.addEventListener('click', () => show(Number(dot.dataset.slideTo))));
 
-        slider.addEventListener('mouseenter', () => hold(true));
-        slider.addEventListener('mouseleave', () => hold(slider.contains(document.activeElement)));
+        slider.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') hold(true); });
+        slider.addEventListener('pointerleave', (event) => { if (event.pointerType === 'mouse') hold(slider.contains(document.activeElement)); });
         slider.addEventListener('focusin', () => hold(true));
         slider.addEventListener('focusout', (event) => {
             if (!slider.contains(event.relatedTarget)) hold(slider.matches(':hover'));
@@ -215,12 +222,17 @@
         document.addEventListener('visibilitychange', schedule);
 
         let touchX = null;
-        slider.addEventListener('touchstart', (event) => { touchX = event.touches[0].clientX; }, { passive: true });
+        slider.addEventListener('touchstart', (event) => {
+            touchX = event.touches[0].clientX;
+            hold(true);
+        }, { passive: true });
         slider.addEventListener('touchend', (event) => {
             if (touchX === null) return;
             const delta = event.changedTouches[0].clientX - touchX;
-            if (Math.abs(delta) > 50) show(current + (delta < 0 ? 1 : -1));
             touchX = null;
+            held = false;
+            if (Math.abs(delta) > 50) show(current + (delta < 0 ? 1 : -1));
+            else schedule();
         });
 
         show(0);
@@ -229,11 +241,9 @@
     /* ------------------------------------------------------------ Apartment carousel */
     $$('[data-carousel]').forEach((carousel) => {
         const track = $('[data-carousel-track]', carousel);
-        const controls = $('[data-carousel-controls]', carousel);
         const prev = $('[data-carousel-prev]', carousel);
         const next = $('[data-carousel-next]', carousel);
-        const bar = $('[data-carousel-progress]', carousel);
-        if (!track || !controls) return;
+        if (!track || !prev || !next) return;
 
         const step = () => {
             const item = track.firstElementChild;
@@ -243,15 +253,13 @@
 
         const update = () => {
             const max = track.scrollWidth - track.clientWidth;
-            controls.hidden = max <= 1;
+            prev.hidden = next.hidden = max <= 1;
             if (max <= 1) return;
             prev.disabled = track.scrollLeft <= 1;
             next.disabled = track.scrollLeft >= max - 1;
-            if (bar) {
-                const visible = track.clientWidth / track.scrollWidth;
-                bar.style.width = (visible * 100) + '%';
-                bar.style.transform = 'translateX(' + ((track.scrollLeft / max) * (1 / visible - 1) * 100) + '%)';
-            }
+            // Centre the arrows on the photographs rather than the whole card.
+            const visual = $('.apartment-card__visual', track);
+            if (visual) carousel.style.setProperty('--arrow-top', (visual.offsetHeight / 2) + 'px');
         };
 
         const behavior = reducedMotion ? 'auto' : 'smooth';
@@ -325,5 +333,33 @@
         }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
 
         revealItems.forEach((item) => revealObserver.observe(item));
+    }
+
+    /* ------------------------------------------------------------ Day strip tint sweep */
+    // Desktop: the whole row sweeps right to left (delays in CSS), holds once every
+    // tint is in, then fades out together. Stacked on mobile, each step tints as it
+    // scrolls into view.
+    const dayStrip = $('.day-strip');
+    if (dayStrip && !reducedMotion && 'IntersectionObserver' in window) {
+        const tint = (target, delayMs, holdMs) => {
+            window.setTimeout(() => target.classList.add('is-tinting'), delayMs);
+            window.setTimeout(() => target.classList.remove('is-tinting'), delayMs + holdMs);
+        };
+        const tintObserver = new IntersectionObserver((entries) => {
+            entries.filter((entry) => entry.isIntersecting).forEach((entry, i) => {
+                tintObserver.unobserve(entry.target);
+                if (entry.target === dayStrip) {
+                    tint(dayStrip, 0, 3400);
+                } else {
+                    tint(entry.target, i * 300, 1500);
+                }
+            });
+        }, { rootMargin: '0px 0px -15% 0px', threshold: 0.6 });
+
+        if (window.matchMedia('(min-width: 960px)').matches) {
+            tintObserver.observe(dayStrip);
+        } else {
+            $$('.day-strip__step', dayStrip).forEach((step) => tintObserver.observe(step));
+        }
     }
 })();

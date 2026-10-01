@@ -10,9 +10,7 @@ $navIndex = 0;
 ?>
 <header class="site-header" data-header>
     <div class="site-header__inner container">
-        <a class="site-header__logo" href="<?= e(url()) ?>" aria-label="<?= e(SITE_NAME) ?> - home">
-            <img src="<?= e(asset(substr(LOGO_GROUP, strlen('assets/')))) ?>" alt="" width="<?= LOGO_GROUP_WIDTH ?>" height="<?= LOGO_GROUP_HEIGHT ?>">
-        </a>
+        <?php component('logo', ['class' => 'site-header__logo']); ?>
 
         <nav class="site-nav" aria-label="Main">
             <ul class="site-nav__list">
