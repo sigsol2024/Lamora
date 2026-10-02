@@ -1040,6 +1040,36 @@
     to   { clip-path: polygon(0 22%, 50% 0, 100% 22%, 100% 100%, 0 100%); }
 }
 
+/* Reverse: photograph on the left, so the point and the fade face right */
+@media (min-width: 960px) {
+    .hero-split--reverse .hero-split__media--hex .media {
+        clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
+        animation-name: hero-hex-reverse;
+    }
+
+    .hero-split--reverse .hero-split__media--hex .media::after {
+        background: linear-gradient(to left, rgb(7 33 99 / 0.85) 0%, rgb(7 33 99 / 0.45) 22%, rgb(7 33 99 / 0) 55%);
+    }
+
+    .hero-split--reverse .hero-split__pattern {
+        left: auto;
+        right: 0;
+        -webkit-mask-image: linear-gradient(to left, #000 10%, transparent);
+        mask-image: linear-gradient(to left, #000 10%, transparent);
+    }
+}
+
+@keyframes hero-hex-reverse {
+    from { clip-path: polygon(0 0, 100% 0, 100% 50%, 100% 100%, 0 100%); }
+    to   { clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-split--reverse .hero-split__media--hex .media {
+        animation: none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .hero-split__media--hex .media {
         animation: none;

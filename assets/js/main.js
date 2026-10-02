@@ -270,6 +270,138 @@
         update();
     });
 
+    /* ------------------------------------------------------------ Shared autoplay
+       Runs only while the slider is on screen and the tab is visible; pauses on
+       hover, keyboard focus and touch, and waits after any manual interaction. */
+    const autoplay = (root, delay, advance) => {
+        if (reducedMotion) return { hold: () => {} };
+        let hovered = false;
+        let focused = false;
+        let touching = false;
+        let inView = false;
+        let resumeAt = 0;
+
+        const hold = (ms) => { resumeAt = Date.now() + ms; };
+
+        root.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') hovered = true; });
+        root.addEventListener('pointerleave', () => { hovered = false; });
+        root.addEventListener('focusin', (event) => { focused = event.target.matches(':focus-visible'); });
+        root.addEventListener('focusout', (event) => { if (!root.contains(event.relatedTarget)) focused = false; });
+        root.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+        root.addEventListener('touchend', () => { touching = false; hold(5000); }, { passive: true });
+        root.addEventListener('wheel', () => hold(5000), { passive: true });
+
+        new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; }, { threshold: 0.3 }).observe(root);
+
+        setInterval(() => {
+            if (hovered || focused || touching || !inView || document.hidden || Date.now() < resumeAt) return;
+            advance();
+        }, delay);
+
+        return { hold };
+    };
+
+    /* ------------------------------------------------------------ Corporate services slider */
+    $$('[data-autoscroll]').forEach((slider) => {
+        const track = $('[data-autoscroll-track]', slider);
+        const prev = $('[data-autoscroll-prev]', slider);
+        const next = $('[data-autoscroll-next]', slider);
+        if (!track || !prev || !next) return;
+
+        const behavior = reducedMotion ? 'auto' : 'smooth';
+        const max = () => track.scrollWidth - track.clientWidth;
+        const step = () => {
+            const item = track.firstElementChild;
+            const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+            return item ? item.getBoundingClientRect().width + gap : track.clientWidth;
+        };
+
+        const go = (direction) => {
+            const end = max();
+            if (direction > 0 && track.scrollLeft >= end - 2) track.scrollTo({ left: 0, behavior });
+            else if (direction < 0 && track.scrollLeft <= 2) track.scrollTo({ left: end, behavior });
+            else track.scrollBy({ left: direction * step(), behavior });
+        };
+
+        const update = () => {
+            const end = max();
+            slider.style.setProperty('--thumb', Math.min(1, track.clientWidth / track.scrollWidth).toFixed(4));
+            slider.style.setProperty('--pos', end > 0 ? (track.scrollLeft / end).toFixed(4) : '0');
+        };
+
+        const play = autoplay(slider, 3500, () => go(1));
+        prev.addEventListener('click', () => { go(-1); play.hold(8000); });
+        next.addEventListener('click', () => { go(1); play.hold(8000); });
+        track.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    });
+
+    /* ------------------------------------------------------------ Vertical looping slider
+       The first two slides are cloned onto the end; after sliding onto the
+       clones the track jumps back to the start without a transition. */
+    $$('[data-vslider]').forEach((slider) => {
+        const viewport = $('[data-vslider-viewport]', slider);
+        const track = $('[data-vslider-track]', slider);
+        const prev = $('[data-vslider-prev]', slider);
+        const next = $('[data-vslider-next]', slider);
+        const visible = 2;
+        const count = track ? track.children.length : 0;
+        if (!viewport || !track || !prev || !next || count <= visible) return;
+
+        [...track.children].slice(0, visible).forEach((slide) => {
+            const clone = slide.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            clone.inert = true;
+            track.appendChild(clone);
+        });
+
+        const slides = track.children;
+        let index = 0;
+        let busy = false;
+
+        const place = (animate) => {
+            track.classList.toggle('is-animating', animate);
+            track.style.transform = 'translateY(' + (-slides[index].offsetTop) + 'px)';
+        };
+
+        const size = () => {
+            const gap = parseFloat(getComputedStyle(track).rowGap) || 0;
+            viewport.style.height = (slides[visible].offsetTop - slides[0].offsetTop - gap) + 'px';
+            place(false);
+        };
+
+        const go = (direction) => {
+            if (busy) return;
+            if (direction < 0 && index === 0) {
+                index = count;
+                place(false);
+                void track.offsetHeight;
+            }
+            index += direction;
+            if (reducedMotion) {
+                if (index >= count) index = 0;
+                place(false);
+                return;
+            }
+            busy = true;
+            place(true);
+            setTimeout(() => {
+                busy = false;
+                if (index >= count) {
+                    index = 0;
+                    place(false);
+                }
+            }, 950);
+        };
+
+        const play = autoplay(slider, 3200, () => go(1));
+        prev.addEventListener('click', () => { go(-1); play.hold(8000); });
+        next.addEventListener('click', () => { go(1); play.hold(8000); });
+        window.addEventListener('resize', size);
+        size();
+    });
+
     /* ------------------------------------------------------------ Suite gallery lightbox */
     const gallery = $('[data-gallery]');
     const lightbox = $('[data-lightbox]');

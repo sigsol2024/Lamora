@@ -16,12 +16,26 @@
  *                            photograph filling the right side, fading into the
  *                            Navy on its left, its left edge closing into a
  *                            hexagon point on load.
+ * @var bool|null   $reverse  Navy tone only: photograph on the left, text on the
+ *                            right on desktop (mobile is unchanged).
  */
 $variant = $variant ?? 'plain';
 $actions = $actions ?? [];
 $lead    = $lead ?? null;
 $status  = $status ?? null;
 $navy    = ($tone ?? null) === 'navy';
+$reverse = $navy && !empty($reverse);
+
+if ($reverse) {
+    $textCols  = 'span-5 start-8 row-1';
+    $mediaCols = 'span-7 start-1 row-1 bleed-left hero-split__media--hex';
+} elseif ($navy) {
+    $textCols  = 'span-5';
+    $mediaCols = 'span-7 start-6 bleed-right hero-split__media--hex';
+} else {
+    $textCols  = 'span-5';
+    $mediaCols = 'span-6 start-7 bleed-right';
+}
 
 $renderActions = static function (array $actions) use ($navy): void {
     if (!$actions) {
@@ -43,18 +57,18 @@ $renderActions = static function (array $actions) use ($navy): void {
 };
 ?>
 <?php if ($variant === 'split'): ?>
-    <section class="hero-split<?= $navy ? ' hero-split--navy surface-navy' : '' ?>" aria-labelledby="hero-title">
+    <section class="hero-split<?= $navy ? ' hero-split--navy surface-navy' : '' ?><?= $reverse ? ' hero-split--reverse' : '' ?>" aria-labelledby="hero-title">
         <?php if ($navy): ?><div class="hex-pattern hex-pattern--cream hero-split__pattern" aria-hidden="true"></div><?php endif; ?>
         <div class="container">
             <div class="grid hero-split__grid">
-                <div class="hero-split__text span-5">
+                <div class="hero-split__text <?= $textCols ?>">
                     <p class="label label--muted"><?= e($label) ?></p>
                     <h1 class="<?= e($title_class ?? 'h1') ?>" id="hero-title"><?= e($title) ?></h1>
                     <?php if ($lead): ?><p class="lead"><?= e($lead) ?></p><?php endif; ?>
                     <?php if ($status): ?><p class="label hero-split__status"><?= e($status) ?></p><?php endif; ?>
                     <?php $renderActions($actions); ?>
                 </div>
-                <div class="hero-split__media bleed-right<?= $navy ? ' span-7 start-6 hero-split__media--hex' : ' span-6 start-7' ?>">
+                <div class="hero-split__media <?= $mediaCols ?>">
                     <?= img($image, ['priority' => true, 'sizes' => $navy ? '(min-width: 960px) 60vw, 100vw' : '(min-width: 960px) 55vw, 100vw']) ?>
                 </div>
             </div>

@@ -15,19 +15,22 @@
 
 /* Tighter vertical rhythm on the homepage: 72px, 52px on tablets, 40px on phones */
 .page-home main,
-.page-about main {
+.page-about main,
+.page-corporate-stays main {
     --section: 72px;
     --section-sm: 56px;
 }
 
 .page-home .section-head,
-.page-about .section-head {
+.page-about .section-head,
+.page-corporate-stays .section-head {
     margin-bottom: var(--space-l);
 }
 
 @media (max-width: 1023px) {
     .page-home main,
-    .page-about main {
+    .page-about main,
+    .page-corporate-stays main {
         --section: 52px;
         --section-sm: 44px;
     }
@@ -35,13 +38,15 @@
 
 @media (max-width: 480px) {
     .page-home main,
-    .page-about main {
+    .page-about main,
+    .page-corporate-stays main {
         --section: 40px;
         --section-sm: 36px;
     }
 
     .page-home .section-head,
-    .page-about .section-head {
+    .page-about .section-head,
+    .page-corporate-stays .section-head {
         margin-bottom: var(--space-m);
     }
 }
@@ -834,57 +839,315 @@
 /* =================================================================
    Corporate stays
    ================================================================= */
+/* Corporate advantage: label and statement stacked and centred */
+.corporate-advantage__inner {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+}
+
 .corporate-advantage__text {
+    margin-top: var(--space-m);
     max-width: 30em;
+    text-wrap: balance;
 }
 
-.corporate-services__grid {
-    align-items: center;
+@media (max-width: 767px) {
+    .corporate-advantage__text {
+        font-family: var(--font-body);
+        font-size: var(--fs-small);
+        font-weight: 400;
+        line-height: 1.6;
+        letter-spacing: 0;
+        color: var(--navy-muted);
+        text-wrap: pretty;
+    }
 }
 
-.corporate-services__text > * + * {
+/* Corporate services: full-bleed photograph under a Navy gradient */
+.corporate-services {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.corporate-services__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+}
+
+.corporate-services__bg .media {
+    height: 100%;
+}
+
+.corporate-services::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(100deg, rgb(7 33 99 / 0.96) 0%, rgb(7 33 99 / 0.86) 40%, rgb(7 33 99 / 0.62) 100%),
+        linear-gradient(to top, rgb(7 33 99 / 0.7), rgb(7 33 99 / 0) 45%);
+}
+
+.corporate-services__pattern {
+    z-index: -1;
+    left: auto;
+    width: min(55%, 720px);
+    -webkit-mask-image: linear-gradient(to left, #000 15%, transparent);
+    mask-image: linear-gradient(to left, #000 15%, transparent);
+}
+
+.corporate-services__head {
+    max-width: 22em;
+    margin-bottom: var(--space-l);
+}
+
+.corporate-services__head .h2 {
     margin-top: var(--space-m);
 }
 
-.corporate-services__list {
-    columns: 2;
-    column-gap: var(--gutter);
+/* Slider: three cards in view, two on tablets, one and a peek on phones */
+.service-slider {
+    --cards: 3;
+    --card-gap: var(--gutter);
+}
+
+.service-slider__track {
+    display: flex;
+    gap: var(--card-gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.service-slider__track::-webkit-scrollbar {
+    display: none;
+}
+
+.service-card {
+    flex: 0 0 calc((100% - (var(--cards) - 1) * var(--card-gap)) / var(--cards));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-l);
+    min-height: clamp(200px, 17vw, 250px);
+    padding: clamp(1.5rem, 2.4vw, 2.25rem);
+    border: var(--rule) solid var(--cream-line);
+    border-radius: var(--radius);
+    background: rgb(254 254 254 / 0.06);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    scroll-snap-align: start;
+    transition: background-color 300ms var(--ease), border-color 300ms var(--ease);
+}
+
+.service-card:hover {
+    background: rgb(254 254 254 / 0.1);
+    border-color: rgb(251 239 201 / 0.4);
+}
+
+.service-card__text {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    line-height: 1.3;
+    color: var(--white);
+    text-wrap: balance;
+}
+
+.service-slider__footer {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
     margin-top: var(--space-l);
 }
 
-.corporate-services__list li {
-    break-inside: avoid;
+.service-slider__note {
+    flex: none;
 }
 
-@media (max-width: 600px) {
-    .corporate-services__list {
-        columns: 1;
+.service-slider__progress {
+    position: relative;
+    flex: 1;
+    height: 2px;
+    background: var(--cream-line);
+    overflow: hidden;
+}
+
+.service-slider__progress span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--thumb, 0.3) * 100%);
+    background: var(--cream);
+    transform: translateX(calc(var(--pos, 0) * (1 / var(--thumb, 0.3) - 1) * 100%));
+    transition: transform 400ms var(--ease);
+}
+
+.service-slider__buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+@media (max-width: 1023px) {
+    .service-slider {
+        --cards: 2;
     }
+}
+
+@media (max-width: 640px) {
+    .service-slider {
+        --cards: 1;
+        --card-gap: 0.85rem;
+    }
+
+    .service-card {
+        flex-basis: 82%;
+        min-height: 190px;
+    }
+
+    .service-slider__footer {
+        flex-wrap: wrap;
+    }
+
+    .service-slider__note {
+        flex-basis: 100%;
+        order: 3;
+    }
+}
+
+/* Extended stays: image-led cards, two columns at every width */
+.extended__grid {
+    row-gap: var(--space-l);
 }
 
 .extended__title {
     margin-top: var(--space-m);
 }
 
-.extended__profiles {
+.stay-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-l) var(--gutter);
+}
+
+.stay-card .media img {
+    transition: transform 1200ms var(--ease);
+}
+
+.stay-card:hover .media img {
+    transform: scale(1.03);
+}
+
+.stay-card__title {
+    margin-top: 1.1rem;
+    padding-top: 0.9rem;
+    border-top: var(--rule) solid var(--navy-line);
+}
+
+.stay-card__text {
+    margin-top: 0.4rem;
+    max-width: 24em;
+}
+
+@media (max-width: 767px) {
+    .stay-cards {
+        gap: var(--space-m) 0.85rem;
+    }
+
+    .stay-card__title {
+        margin-top: 0.75rem;
+        padding-top: 0.6rem;
+        font-size: 1.15rem;
+    }
+
+    .stay-card__text {
+        font-size: 0.8125rem;
+        line-height: 1.5;
+    }
+}
+
+/* Made for longer stays: vertical slider (30%) beside the detail (70%) */
+.longer__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+}
+
+.vslider__viewport {
+    overflow: hidden;
+}
+
+.vslider__track {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+}
+
+.vslider__track.is-animating {
+    transition: transform 900ms var(--ease);
+}
+
+/* Two-line caption box keeps every slide the same height */
+.vslider__caption {
+    margin-top: 0.6rem;
+    min-height: 3em;
+    line-height: 1.5;
+}
+
+.vslider__buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+}
+
+.vslider__buttons .round-button {
+    width: 40px;
+    height: 40px;
+}
+
+.vslider__buttons .icon {
+    transform: rotate(90deg);
+}
+
+.longer__title {
+    margin-top: var(--space-m);
+}
+
+.longer__list {
+    columns: 2;
+    column-gap: var(--gutter);
     margin-top: var(--space-l);
 }
 
-.extended__profiles > div {
-    display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
-    gap: var(--gutter);
-    align-items: baseline;
-    padding-block: 1.1rem;
+.longer__list li {
+    break-inside: avoid;
 }
 
-.extended__label {
-    margin-bottom: var(--space-m);
+@media (max-width: 959px) {
+    .longer__layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vslider {
+        width: min(100%, 420px);
+    }
+
+    .vslider .media {
+        aspect-ratio: 16 / 9;
+    }
+
+    .vslider__buttons {
+        justify-content: flex-start;
+    }
 }
 
-@media (min-width: 960px) {
-    .extended__label {
-        margin-top: calc(var(--space-m) + var(--fs-label) * 1.5);
+@media (max-width: 600px) {
+    .longer__list {
+        columns: 1;
     }
 }
 

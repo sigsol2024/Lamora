@@ -83,4 +83,17 @@ return [
     'about.hero'      => ['file' => 'placeholder/reception/silkwood-83.jpg', 'alt' => 'Timber panelling, shelving and a quiet table in a lounge', 'focus' => '45% 55%'],
     'corporate.hero'  => ['file' => 'placeholder/meeting-space/silkwood-149.jpg', 'alt' => 'A meeting room prepared for a leadership session', 'focus' => '50% 55%'],
     'corporate.work'  => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-216.jpg', 'alt' => 'A suite work desk with lamp and chair', 'focus' => '60% 55%'],
+
+    // Corporate: stay types
+    'corporate.nightly' => ['file' => 'placeholder/rooms/executive/silkwood-187.jpg', 'alt' => 'A made bed with a cream throw', 'focus' => '50% 60%'],
+    'corporate.weekly'  => ['file' => 'placeholder/rooms/executive/silkwood-185.jpg', 'alt' => 'A work desk, television and kitchenette', 'focus' => '50% 55%'],
+    'corporate.monthly' => ['file' => 'placeholder/rooms/executive/silkwood-174.jpg', 'alt' => 'A living area with sofa, dining table and kitchenette', 'focus' => '50% 55%'],
+    'corporate.bespoke' => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-220.jpg', 'alt' => 'A large suite living room in daylight', 'focus' => '50% 55%'],
+
+    // Corporate: "Made for longer stays" slider
+    'corporate.long-living'       => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-203.jpg', 'alt' => 'A living room with a sofa, round table and work desk', 'focus' => '50% 55%'],
+    'corporate.long-bedroom'      => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-212.jpg', 'alt' => 'A separate bedroom with a double bed and bedside lamps', 'focus' => '50% 60%'],
+    'corporate.long-kitchen'      => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-225.jpg', 'alt' => 'A kitchen counter beside the lounge seating', 'focus' => '50% 55%'],
+    'corporate.long-storage'      => ['file' => 'placeholder/rooms/executive/silkwood-186.jpg', 'alt' => 'A tall wardrobe beside the work desk', 'focus' => '45% 50%'],
+    'corporate.long-housekeeping' => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-218.jpg', 'alt' => 'A fresh bathrobe beside a marble washbasin', 'focus' => '60% 50%'],
 ];
