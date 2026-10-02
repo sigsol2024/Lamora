@@ -988,6 +988,20 @@
     justify-content: center;
 }
 
+@media (min-width: 960px) {
+    .hero-split--navy .hero-split__text {
+        text-align: left;
+    }
+
+    .hero-split--navy .hero-split__text .lead {
+        margin-inline: 0;
+    }
+
+    .hero-split--navy .actions {
+        justify-content: flex-start;
+    }
+}
+
 .hero-split__media--hex .media {
     min-height: clamp(420px, 64vh, 680px);
     clip-path: polygon(18% 0, 100% 0, 100% 100%, 18% 100%, 0 50%);

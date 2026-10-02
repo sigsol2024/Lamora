@@ -753,6 +753,24 @@
     color: var(--navy-line);
 }
 
+/* Mobile: two even rows of three, columns aligned, no separators */
+@media (max-width: 767px) {
+    .personality {
+        row-gap: var(--space-m);
+    }
+
+    .personality__list {
+        display: grid;
+        grid-template-columns: repeat(3, max-content);
+        gap: 0.5rem clamp(1rem, 6vw, 2rem);
+        font-size: 1.2rem;
+    }
+
+    .personality__list li + li::before {
+        content: none;
+    }
+}
+
 .location-index li {
     border-top: var(--rule) solid var(--navy-line);
 }
