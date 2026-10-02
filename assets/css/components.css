@@ -1040,11 +1040,16 @@
     to   { clip-path: polygon(0 22%, 50% 0, 100% 22%, 100% 100%, 0 100%); }
 }
 
-/* Reverse: photograph on the left, so the point and the fade face right */
+/* Reverse: photograph on the left, so the point and the fade face right; fills the screen */
 @media (min-width: 960px) {
     .hero-split--reverse .hero-split__media--hex .media {
+        min-height: max(520px, calc(100svh - var(--header-h)));
         clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
         animation-name: hero-hex-reverse;
+    }
+
+    .hero-split--reverse .hero-split__text {
+        align-self: center;
     }
 
     .hero-split--reverse .hero-split__media--hex .media::after {

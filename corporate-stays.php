@@ -47,13 +47,6 @@ $longSlides = [
     ]); ?>
 
     <!-- Corporate advantage -->
-    <section class="section corporate-advantage" aria-labelledby="advantage-title">
-        <div class="container corporate-advantage__inner reveal">
-            <p class="label label--muted">The corporate advantage</p>
-            <p class="h3 corporate-advantage__text" id="advantage-title"><?= e(site('corporate_advantage')) ?></p>
-        </div>
-    </section>
-
     <!-- Corporate services: photograph behind a Navy gradient, auto-scrolling cards -->
     <section class="section surface-navy corporate-services" aria-labelledby="services-title">
         <div class="corporate-services__bg" aria-hidden="true">
@@ -63,8 +56,11 @@ $longSlides = [
 
         <div class="container corporate-services__inner">
             <div class="corporate-services__head reveal">
-                <p class="label label--muted">For companies</p>
-                <h2 class="h2" id="services-title">Corporate services</h2>
+                <div>
+                    <p class="label label--muted">For companies</p>
+                    <h2 class="h2" id="services-title">Corporate services</h2>
+                </div>
+                <p class="corporate-services__advantage"><?= e(site('corporate_advantage')) ?></p>
             </div>
 
             <div class="service-slider reveal" data-autoscroll>
@@ -89,15 +85,33 @@ $longSlides = [
         </div>
     </section>
 
-    <!-- Extended stays: one image-led card per stay type -->
+    <!-- Extended stays: heading above; vertical looping slider (30%) beside the stay cards (70%) -->
     <section class="section surface-cream extended" aria-labelledby="extended-title">
         <div class="container">
-            <div class="grid extended__grid">
-                <div class="span-4 reveal">
-                    <p class="label label--muted">Extended stays</p>
-                    <h2 class="h2 extended__title" id="extended-title"><?= e(copy_line('ways_title')) ?></h2>
+            <div class="extended__head reveal">
+                <p class="label label--muted">Extended stays</p>
+                <h2 class="h2 extended__title" id="extended-title"><?= e(copy_line('ways_title')) ?></h2>
+            </div>
+
+            <div class="extended__layout">
+                <div class="vslider reveal" data-vslider>
+                    <div class="vslider__viewport" data-vslider-viewport>
+                        <ul class="vslider__track" data-vslider-track>
+                            <?php foreach ($longSlides as $slide): ?>
+                                <li class="vslider__item">
+                                    <?= img($slide['image'], ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 26vw, 90vw']) ?>
+                                    <p class="label label--muted vslider__caption"><?= e($slide['caption']) ?></p>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="vslider__buttons">
+                        <button class="round-button" type="button" aria-label="Previous photographs" data-vslider-prev><?= icon('arrow-left') ?></button>
+                        <button class="round-button" type="button" aria-label="Next photographs" data-vslider-next><?= icon('arrow-right') ?></button>
+                    </div>
                 </div>
-                <ul class="span-8 start-5 stay-cards">
+
+                <ul class="stay-cards">
                     <?php foreach (site('stay_profiles') as $profile): ?>
                         <li class="stay-card reveal">
                             <?= img($stayImages[$profile['name']] ?? 'corporate.monthly', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 30vw, 50vw']) ?>
@@ -110,29 +124,14 @@ $longSlides = [
         </div>
     </section>
 
-    <!-- Made for longer stays: vertical looping slider (30%) beside the detail (70%) -->
+    <!-- Made for longer stays -->
     <section class="section longer" aria-labelledby="longer-title">
-        <div class="container longer__layout">
-            <div class="vslider reveal" data-vslider>
-                <div class="vslider__viewport" data-vslider-viewport>
-                    <ul class="vslider__track" data-vslider-track>
-                        <?php foreach ($longSlides as $slide): ?>
-                            <li class="vslider__item">
-                                <?= img($slide['image'], ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 26vw, 90vw']) ?>
-                                <p class="label label--muted vslider__caption"><?= e($slide['caption']) ?></p>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
+        <div class="container">
+            <div class="grid">
+                <div class="span-4 reveal">
+                    <h2 class="h2" id="longer-title">Made for longer stays</h2>
                 </div>
-                <div class="vslider__buttons">
-                    <button class="round-button" type="button" aria-label="Previous photographs" data-vslider-prev><?= icon('arrow-left') ?></button>
-                    <button class="round-button" type="button" aria-label="Next photographs" data-vslider-next><?= icon('arrow-right') ?></button>
-                </div>
-            </div>
-
-            <div class="longer__content reveal">
-                <h2 class="h2 longer__title" id="longer-title">Made for longer stays</h2>
-                <ul class="rows small longer__list">
+                <ul class="span-8 start-5 rows small longer__list reveal">
                     <?php foreach ($extended as $item): ?><li><?= e($item) ?></li><?php endforeach; ?>
                 </ul>
             </div>

@@ -839,31 +839,6 @@
 /* =================================================================
    Corporate stays
    ================================================================= */
-/* Corporate advantage: label and statement stacked and centred */
-.corporate-advantage__inner {
-    display: grid;
-    justify-items: center;
-    text-align: center;
-}
-
-.corporate-advantage__text {
-    margin-top: var(--space-m);
-    max-width: 30em;
-    text-wrap: balance;
-}
-
-@media (max-width: 767px) {
-    .corporate-advantage__text {
-        font-family: var(--font-body);
-        font-size: var(--fs-small);
-        font-weight: 400;
-        line-height: 1.6;
-        letter-spacing: 0;
-        color: var(--navy-muted);
-        text-wrap: pretty;
-    }
-}
-
 /* Corporate services: full-bleed photograph under a Navy gradient */
 .corporate-services {
     position: relative;
@@ -899,8 +874,10 @@
     mask-image: linear-gradient(to left, #000 15%, transparent);
 }
 
+/* Title top-left, corporate advantage statement opposite */
 .corporate-services__head {
-    max-width: 22em;
+    display: grid;
+    gap: var(--space-m) var(--gutter);
     margin-bottom: var(--space-l);
 }
 
@@ -908,10 +885,34 @@
     margin-top: var(--space-m);
 }
 
-/* Slider: three cards in view, two on tablets, one and a peek on phones */
+.corporate-services__advantage {
+    max-width: 34em;
+    color: var(--cream-muted);
+    text-wrap: pretty;
+}
+
+@media (min-width: 960px) {
+    .corporate-services__head {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        align-items: end;
+    }
+
+    .corporate-services__advantage {
+        justify-self: end;
+    }
+}
+
+@media (max-width: 767px) {
+    .corporate-services__advantage {
+        font-size: var(--fs-small);
+        line-height: 1.6;
+    }
+}
+
+/* Slider: five compact cards in view, fewer as the screen narrows */
 .service-slider {
-    --cards: 3;
-    --card-gap: var(--gutter);
+    --cards: 5;
+    --card-gap: 1rem;
 }
 
 .service-slider__track {
@@ -933,9 +934,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: var(--space-l);
-    min-height: clamp(200px, 17vw, 250px);
-    padding: clamp(1.5rem, 2.4vw, 2.25rem);
+    gap: var(--space-m);
+    min-height: clamp(150px, 12vw, 180px);
+    padding: 1.25rem;
     border: var(--rule) solid var(--cream-line);
     border-radius: var(--radius);
     background: rgb(254 254 254 / 0.06);
@@ -950,10 +951,19 @@
     border-color: rgb(251 239 201 / 0.4);
 }
 
+.service-card .hex-index {
+    width: 34px;
+    height: 39px;
+}
+
+.service-card .hex-index span {
+    font-size: 0.8125rem;
+}
+
 .service-card__text {
     font-family: var(--font-display);
-    font-size: var(--fs-h4);
-    line-height: 1.3;
+    font-size: 1.05rem;
+    line-height: 1.35;
     color: var(--white);
     text-wrap: balance;
 }
@@ -991,21 +1001,26 @@
     gap: 0.5rem;
 }
 
+@media (max-width: 1199px) {
+    .service-slider {
+        --cards: 4;
+    }
+}
+
 @media (max-width: 1023px) {
     .service-slider {
-        --cards: 2;
+        --cards: 3;
     }
 }
 
 @media (max-width: 640px) {
     .service-slider {
-        --cards: 1;
-        --card-gap: 0.85rem;
+        --card-gap: 0.75rem;
     }
 
     .service-card {
-        flex-basis: 82%;
-        min-height: 190px;
+        flex-basis: 58%;
+        min-height: 150px;
     }
 
     .service-slider__footer {
@@ -1018,14 +1033,24 @@
     }
 }
 
-/* Extended stays: image-led cards, two columns at every width */
-.extended__grid {
-    row-gap: var(--space-l);
+/* Extended stays: heading above, slider (30%) beside the stay cards (70%) */
+.extended__head {
+    max-width: 30em;
+    margin-bottom: var(--space-l);
 }
 
 .extended__title {
     margin-top: var(--space-m);
 }
+
+.extended__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+}
+
+/* Stay cards: image-led, two columns at every width */
 
 .stay-cards {
     display: grid;
@@ -1069,14 +1094,7 @@
     }
 }
 
-/* Made for longer stays: vertical slider (30%) beside the detail (70%) */
-.longer__layout {
-    display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
-    gap: clamp(2rem, 6vw, 6rem);
-    align-items: center;
-}
-
+/* Vertical looping slider: two photographs in view */
 .vslider__viewport {
     overflow: hidden;
 }
@@ -1113,14 +1131,10 @@
     transform: rotate(90deg);
 }
 
-.longer__title {
-    margin-top: var(--space-m);
-}
-
+/* Made for longer stays */
 .longer__list {
     columns: 2;
     column-gap: var(--gutter);
-    margin-top: var(--space-l);
 }
 
 .longer__list li {
@@ -1128,7 +1142,7 @@
 }
 
 @media (max-width: 959px) {
-    .longer__layout {
+    .extended__layout {
         grid-template-columns: minmax(0, 1fr);
     }
 
