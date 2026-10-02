@@ -107,20 +107,25 @@ $locationIndex = 0;
     <!-- Ways to stay -->
     <section class="ways surface-cream" aria-labelledby="ways-title">
         <div class="container">
-            <div class="grid ways__grid">
-                <div class="span-5 bleed-left ways__media reveal">
-                    <?= img('home.ways', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 40vw, 100vw']) ?>
-                    <div class="ways__divider" aria-hidden="true">
-                        <svg viewBox="0 0 100 50">
-                            <path d="M14 25h15.5M70.5 25H86"/>
-                            <path d="M50 1.5 70.5 13.25v23.5L50 48.5 29.5 36.75v-23.5Z"/>
-                            <path class="ways__divider-core" d="M50 15.6 58.2 20.3v9.4L50 34.4l-8.2-4.7v-9.4Z"/>
-                            <path class="ways__divider-core" d="M10 20.4 14 22.7v4.6L10 29.6 6 27.3v-4.6ZM90 20.4 94 22.7v4.6L90 29.6 86 27.3v-4.6Z"/>
-                        </svg>
-                    </div>
-                    <?= img('home.ways-2', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 40vw, 100vw']) ?>
+            <div class="ways__layout">
+                <div class="ways__photo ways__photo--a bleed-left reveal">
+                    <?= img('home.ways', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 45vw, 100vw']) ?>
                 </div>
-                <div class="span-6 start-7 ways__text">
+
+                <div class="ways__divider" aria-hidden="true">
+                    <svg viewBox="0 0 100 50">
+                        <path d="M14 25h15.5M70.5 25H86"/>
+                        <path d="M50 1.5 70.5 13.25v23.5L50 48.5 29.5 36.75v-23.5Z"/>
+                        <path class="ways__divider-core" d="M50 15.6 58.2 20.3v9.4L50 34.4l-8.2-4.7v-9.4Z"/>
+                        <path class="ways__divider-core" d="M10 20.4 14 22.7v4.6L10 29.6 6 27.3v-4.6ZM90 20.4 94 22.7v4.6L90 29.6 86 27.3v-4.6Z"/>
+                    </svg>
+                </div>
+
+                <div class="ways__photo ways__photo--b bleed-right reveal">
+                    <?= img('home.ways-2', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 45vw, 100vw']) ?>
+                </div>
+
+                <div class="ways__intro">
                     <div class="reveal">
                         <p class="label label--muted">Ways to stay</p>
                         <h2 class="h2 ways__title" id="ways-title"><?= e(copy_line('ways_title')) ?></h2>
@@ -134,18 +139,18 @@ $locationIndex = 0;
                             </div>
                         <?php endforeach; ?>
                     </dl>
+                </div>
 
-                    <div class="reveal">
-                        <p class="label label--muted ways__audience-label">Who The Lamora is for</p>
-                        <p class="ways__audience-title"><?= e(copy_line('audience_title')) ?></p>
-                        <ul class="ways__audiences small">
-                            <?php foreach (site('audiences') as $audience): ?>
-                                <li><?= e($audience) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <div class="actions">
-                            <a class="link-arrow" href="<?= e(url('corporate-stays')) ?>">Corporate and extended stays <?= icon('arrow-right') ?></a>
-                        </div>
+                <div class="ways__audience reveal">
+                    <p class="label label--muted ways__audience-label">Who The Lamora is for</p>
+                    <p class="ways__audience-title"><?= e(copy_line('audience_title')) ?></p>
+                    <ul class="ways__audiences small">
+                        <?php foreach (site('audiences') as $audience): ?>
+                            <li><?= e($audience) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <div class="actions">
+                        <a class="link-arrow" href="<?= e(url('corporate-stays')) ?>">Corporate and extended stays <?= icon('arrow-right') ?></a>
                     </div>
                 </div>
             </div>
