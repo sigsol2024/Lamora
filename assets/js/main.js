@@ -369,15 +369,13 @@
         // the two sit side by side (desktop); otherwise slides keep their ratio.
         const fit = slider.dataset.vsliderFit ? $(slider.dataset.vsliderFit) : null;
         const sideBySide = window.matchMedia('(min-width: 960px)');
-        const buttons = prev.parentElement;
 
         const size = () => {
             const gap = parseFloat(getComputedStyle(track).rowGap) || 0;
             const fitted = Boolean(fit && sideBySide.matches);
             slider.classList.toggle('is-fitted', fitted);
             if (fitted) {
-                const controls = buttons.offsetHeight + (parseFloat(getComputedStyle(buttons).marginTop) || 0);
-                const height = Math.max(240, fit.offsetHeight - controls);
+                const height = Math.max(240, fit.offsetHeight);
                 track.style.setProperty('--slide-h', ((height - gap) / visible) + 'px');
                 viewport.style.height = height + 'px';
             } else {

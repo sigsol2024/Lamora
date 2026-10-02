@@ -46,7 +46,32 @@ $longSlides = [
         ],
     ]); ?>
 
-    <!-- Corporate advantage -->
+    <!-- Who we host -->
+    <section class="section audiences" aria-labelledby="audiences-title">
+        <div class="container">
+            <div class="grid">
+                <div class="span-4 reveal">
+                    <p class="label label--muted">Who we host</p>
+                    <h2 class="h2" id="audiences-title">Guests who value privacy, space and service.</h2>
+                </div>
+                <ol class="span-7 start-6 audiences__list">
+                    <?php foreach (site('audiences') as $i => $audience): ?>
+                        <li class="reveal">
+                            <?= hex_index(sprintf('%02d', $i + 1)) ?>
+                            <span><?= e($audience) ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            </div>
+            <div class="grid payment reveal">
+                <p class="span-4 label label--muted">Payment</p>
+                <ul class="span-7 start-6 payment__list small">
+                    <?php foreach (site('payment_methods') as $method): ?><li><?= e($method) ?></li><?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </section>
+
     <!-- Corporate services: photograph behind a Navy gradient, auto-scrolling cards -->
     <section class="section surface-navy corporate-services" aria-labelledby="services-title">
         <div class="corporate-services__bg" aria-hidden="true">
@@ -85,7 +110,7 @@ $longSlides = [
         </div>
     </section>
 
-    <!-- Extended stays: heading above; vertical looping slider (30%) beside the stay cards (70%) -->
+    <!-- Extended stays: heading above; vertical looping slider (35%) beside the stay cards (65%) -->
     <section class="section surface-cream extended" aria-labelledby="extended-title">
         <div class="container">
             <div class="extended__head reveal">
@@ -95,6 +120,10 @@ $longSlides = [
 
             <div class="extended__layout">
                 <div class="vslider reveal" data-vslider data-vslider-fit=".stay-cards">
+                    <div class="vslider__buttons">
+                        <button class="round-button" type="button" aria-label="Previous photographs" data-vslider-prev><?= icon('arrow-left') ?></button>
+                        <button class="round-button" type="button" aria-label="Next photographs" data-vslider-next><?= icon('arrow-right') ?></button>
+                    </div>
                     <div class="vslider__viewport" data-vslider-viewport>
                         <ul class="vslider__track" data-vslider-track>
                             <?php foreach ($longSlides as $slide): ?>
@@ -104,10 +133,6 @@ $longSlides = [
                                 </li>
                             <?php endforeach; ?>
                         </ul>
-                    </div>
-                    <div class="vslider__buttons">
-                        <button class="round-button" type="button" aria-label="Previous photographs" data-vslider-prev><?= icon('arrow-left') ?></button>
-                        <button class="round-button" type="button" aria-label="Next photographs" data-vslider-next><?= icon('arrow-right') ?></button>
                     </div>
                 </div>
 
@@ -126,43 +151,13 @@ $longSlides = [
         </div>
     </section>
 
-    <!-- Made for longer stays -->
+    <!-- Made for longer stays: heading above a centred list -->
     <section class="section longer" aria-labelledby="longer-title">
-        <div class="container">
-            <div class="grid">
-                <div class="span-4 reveal">
-                    <h2 class="h2" id="longer-title">Made for longer stays</h2>
-                </div>
-                <ul class="span-8 start-5 rows small longer__list reveal">
-                    <?php foreach ($extended as $item): ?><li><?= e($item) ?></li><?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Who we host -->
-    <section class="section audiences" aria-labelledby="audiences-title">
-        <div class="container">
-            <div class="grid">
-                <div class="span-4 reveal">
-                    <p class="label label--muted">Who we host</p>
-                    <h2 class="h2" id="audiences-title">Guests who value privacy, space and service.</h2>
-                </div>
-                <ol class="span-7 start-6 audiences__list">
-                    <?php foreach (site('audiences') as $i => $audience): ?>
-                        <li class="reveal">
-                            <?= hex_index(sprintf('%02d', $i + 1)) ?>
-                            <span><?= e($audience) ?></span>
-                        </li>
-                    <?php endforeach; ?>
-                </ol>
-            </div>
-            <div class="grid payment reveal">
-                <p class="span-4 label label--muted">Payment</p>
-                <ul class="span-7 start-6 payment__list small">
-                    <?php foreach (site('payment_methods') as $method): ?><li><?= e($method) ?></li><?php endforeach; ?>
-                </ul>
-            </div>
+        <div class="container longer__inner reveal">
+            <h2 class="h2" id="longer-title">Made for longer stays</h2>
+            <ul class="rows small longer__list">
+                <?php foreach ($extended as $item): ?><li><?= e($item) ?></li><?php endforeach; ?>
+            </ul>
         </div>
     </section>
 
