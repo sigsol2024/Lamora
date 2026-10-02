@@ -64,22 +64,22 @@ $longSlides = [
             </div>
 
             <div class="service-slider reveal" data-autoscroll>
-                <ul class="service-slider__track" data-autoscroll-track aria-label="Corporate services" tabindex="0">
-                    <?php foreach (site('corporate_services') as $i => $service): ?>
-                        <li class="service-card">
-                            <?= hex_index(sprintf('%02d', $i + 1), 'hex-index--cream') ?>
-                            <p class="service-card__text"><?= e($service) ?></p>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="service-slider__stage">
+                    <ul class="service-slider__track" data-autoscroll-track aria-label="Corporate services" tabindex="0">
+                        <?php foreach (site('corporate_services') as $i => $service): ?>
+                            <li class="service-card">
+                                <?= hex_index(sprintf('%02d', $i + 1), 'hex-index--cream') ?>
+                                <p class="service-card__text"><?= e($service) ?></p>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <button class="round-button round-button--light service-slider__arrow service-slider__arrow--prev" type="button" aria-label="Previous services" data-autoscroll-prev><?= icon('arrow-left') ?></button>
+                    <button class="round-button round-button--light service-slider__arrow service-slider__arrow--next" type="button" aria-label="Next services" data-autoscroll-next><?= icon('arrow-right') ?></button>
+                </div>
 
                 <div class="service-slider__footer">
-                    <p class="small muted service-slider__note">Credit facilities are subject to prior approval.</p>
                     <div class="service-slider__progress" aria-hidden="true"><span data-autoscroll-bar></span></div>
-                    <div class="service-slider__buttons">
-                        <button class="round-button round-button--light" type="button" aria-label="Previous services" data-autoscroll-prev><?= icon('arrow-left') ?></button>
-                        <button class="round-button round-button--light" type="button" aria-label="Next services" data-autoscroll-next><?= icon('arrow-right') ?></button>
-                    </div>
+                    <p class="small muted service-slider__note">Credit facilities are subject to prior approval.</p>
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@ $longSlides = [
             </div>
 
             <div class="extended__layout">
-                <div class="vslider reveal" data-vslider>
+                <div class="vslider reveal" data-vslider data-vslider-fit=".stay-cards">
                     <div class="vslider__viewport" data-vslider-viewport>
                         <ul class="vslider__track" data-vslider-track>
                             <?php foreach ($longSlides as $slide): ?>
@@ -115,8 +115,10 @@ $longSlides = [
                     <?php foreach (site('stay_profiles') as $profile): ?>
                         <li class="stay-card reveal">
                             <?= img($stayImages[$profile['name']] ?? 'corporate.monthly', ['ratio' => '3x2', 'sizes' => '(min-width: 960px) 30vw, 50vw']) ?>
-                            <h3 class="h4 stay-card__title"><?= e($profile['name']) ?></h3>
-                            <p class="small muted stay-card__text"><?= e($profile['text']) ?></p>
+                            <div class="stay-card__body">
+                                <h3 class="h4 stay-card__title"><?= e($profile['name']) ?></h3>
+                                <p class="small muted stay-card__text"><?= e($profile['text']) ?></p>
+                            </div>
                         </li>
                     <?php endforeach; ?>
                 </ul>

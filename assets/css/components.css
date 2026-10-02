@@ -1040,16 +1040,23 @@
     to   { clip-path: polygon(0 22%, 50% 0, 100% 22%, 100% 100%, 0 100%); }
 }
 
+.hero-split--reverse .hero-split__text h1 {
+    font-size: clamp(1.75rem, 2.7vw, 2.6rem);
+}
+
 /* Reverse: photograph on the left, so the point and the fade face right; fills the screen */
 @media (min-width: 960px) {
     .hero-split--reverse .hero-split__media--hex .media {
-        min-height: max(520px, calc(100svh - var(--header-h)));
+        height: calc(100vh - var(--header-h) - var(--rule));
+        height: calc(100svh - var(--header-h) - var(--rule));
+        min-height: 440px;
         clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
         animation-name: hero-hex-reverse;
     }
 
     .hero-split--reverse .hero-split__text {
         align-self: center;
+        padding-block: clamp(1.5rem, 3vw, 3rem);
     }
 
     .hero-split--reverse .hero-split__media--hex .media::after {

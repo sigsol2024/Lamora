@@ -365,9 +365,25 @@
             track.style.transform = 'translateY(' + (-slides[index].offsetTop) + 'px)';
         };
 
+        // With data-vslider-fit, the slider matches that element's height while
+        // the two sit side by side (desktop); otherwise slides keep their ratio.
+        const fit = slider.dataset.vsliderFit ? $(slider.dataset.vsliderFit) : null;
+        const sideBySide = window.matchMedia('(min-width: 960px)');
+        const buttons = prev.parentElement;
+
         const size = () => {
             const gap = parseFloat(getComputedStyle(track).rowGap) || 0;
-            viewport.style.height = (slides[visible].offsetTop - slides[0].offsetTop - gap) + 'px';
+            const fitted = Boolean(fit && sideBySide.matches);
+            slider.classList.toggle('is-fitted', fitted);
+            if (fitted) {
+                const controls = buttons.offsetHeight + (parseFloat(getComputedStyle(buttons).marginTop) || 0);
+                const height = Math.max(240, fit.offsetHeight - controls);
+                track.style.setProperty('--slide-h', ((height - gap) / visible) + 'px');
+                viewport.style.height = height + 'px';
+            } else {
+                track.style.removeProperty('--slide-h');
+                viewport.style.height = (slides[visible].offsetTop - slides[0].offsetTop - gap) + 'px';
+            }
             place(false);
         };
 
@@ -399,6 +415,7 @@
         prev.addEventListener('click', () => { go(-1); play.hold(8000); });
         next.addEventListener('click', () => { go(1); play.hold(8000); });
         window.addEventListener('resize', size);
+        if (fit && 'ResizeObserver' in window) new ResizeObserver(size).observe(fit);
         size();
     });
 

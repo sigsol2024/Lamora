@@ -912,7 +912,33 @@
 /* Slider: five compact cards in view, fewer as the screen narrows */
 .service-slider {
     --cards: 5;
-    --card-gap: 1rem;
+    --card-gap: 0.75rem;
+}
+
+/* Arrows sit over the slider, centred on its edges */
+.service-slider__stage {
+    position: relative;
+}
+
+.service-slider__arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: 36px;
+    height: 36px;
+    background: rgb(7 33 99 / 0.8);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+.service-slider__arrow--prev {
+    left: 0;
+    transform: translate(-65%, -50%);
+}
+
+.service-slider__arrow--next {
+    right: 0;
+    transform: translate(65%, -50%);
 }
 
 .service-slider__track {
@@ -934,9 +960,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: var(--space-m);
-    min-height: clamp(150px, 12vw, 180px);
-    padding: 1.25rem;
+    gap: 0.75rem;
+    min-height: clamp(116px, 8.5vw, 132px);
+    padding: 0.9rem 1rem 1rem;
     border: var(--rule) solid var(--cream-line);
     border-radius: var(--radius);
     background: rgb(254 254 254 / 0.06);
@@ -952,36 +978,31 @@
 }
 
 .service-card .hex-index {
-    width: 34px;
-    height: 39px;
+    width: 26px;
+    height: 30px;
 }
 
 .service-card .hex-index span {
-    font-size: 0.8125rem;
+    font-size: 0.6875rem;
 }
 
 .service-card__text {
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     line-height: 1.35;
     color: var(--white);
     text-wrap: balance;
 }
 
+/* Progress line and note sit well below the cards */
 .service-slider__footer {
-    display: flex;
-    align-items: center;
-    gap: clamp(1rem, 3vw, 2.5rem);
-    margin-top: var(--space-l);
-}
-
-.service-slider__note {
-    flex: none;
+    display: grid;
+    gap: 1rem;
+    margin-top: var(--space-xl);
 }
 
 .service-slider__progress {
     position: relative;
-    flex: 1;
     height: 2px;
     background: var(--cream-line);
     overflow: hidden;
@@ -994,11 +1015,6 @@
     background: var(--cream);
     transform: translateX(calc(var(--pos, 0) * (1 / var(--thumb, 0.3) - 1) * 100%));
     transition: transform 400ms var(--ease);
-}
-
-.service-slider__buttons {
-    display: flex;
-    gap: 0.5rem;
 }
 
 @media (max-width: 1199px) {
@@ -1014,26 +1030,29 @@
 }
 
 @media (max-width: 640px) {
-    .service-slider {
-        --card-gap: 0.75rem;
-    }
-
+    /* Tall enough that the arrows sit in the gap between number and text */
     .service-card {
-        flex-basis: 58%;
-        min-height: 150px;
+        flex-basis: 52%;
+        min-height: 156px;
     }
 
-    .service-slider__footer {
-        flex-wrap: wrap;
+    .service-slider__arrow {
+        top: 44%;
     }
 
-    .service-slider__note {
-        flex-basis: 100%;
-        order: 3;
+    .service-slider__arrow--prev {
+        left: 0.25rem;
+        transform: translateY(-50%);
+    }
+
+    .service-slider__arrow--next {
+        right: 0.25rem;
+        transform: translateY(-50%);
     }
 }
 
-/* Extended stays: heading above, slider (30%) beside the stay cards (70%) */
+/* Extended stays: heading above, slider (35%) beside the stay cards (65%);
+   on desktop the slider is sized in main.js to match the cards' height */
 .extended__head {
     max-width: 30em;
     margin-bottom: var(--space-l);
@@ -1045,17 +1064,24 @@
 
 .extended__layout {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
-    gap: clamp(2rem, 4vw, 4rem);
+    grid-template-columns: minmax(0, 35fr) minmax(0, 65fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
     align-items: start;
 }
 
-/* Stay cards: image-led, two columns at every width */
-
+/* Stay cards: photograph with the title and description on a card inside it */
 .stay-cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-l) var(--gutter);
+    gap: var(--gutter);
+}
+
+.stay-card {
+    position: relative;
+}
+
+.stay-card .media {
+    aspect-ratio: 4 / 3;
 }
 
 .stay-card .media img {
@@ -1066,31 +1092,42 @@
     transform: scale(1.03);
 }
 
-.stay-card__title {
-    margin-top: 1.1rem;
-    padding-top: 0.9rem;
-    border-top: var(--rule) solid var(--navy-line);
+.stay-card__body {
+    position: absolute;
+    inset: auto 0.75rem 0.75rem;
+    padding: 0.85rem 1rem 0.9rem;
+    border-radius: var(--radius);
+    background: rgb(254 254 254 / 0.9);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
 }
 
 .stay-card__text {
-    margin-top: 0.4rem;
-    max-width: 24em;
+    margin-top: 0.25rem;
+    line-height: 1.5;
 }
 
 @media (max-width: 767px) {
     .stay-cards {
-        gap: var(--space-m) 0.85rem;
+        gap: 0.75rem;
+    }
+
+    .stay-card .media {
+        aspect-ratio: 3 / 4;
+    }
+
+    .stay-card__body {
+        inset: auto 0.5rem 0.5rem;
+        padding: 0.6rem 0.7rem 0.65rem;
     }
 
     .stay-card__title {
-        margin-top: 0.75rem;
-        padding-top: 0.6rem;
-        font-size: 1.15rem;
+        font-size: 1.05rem;
     }
 
     .stay-card__text {
-        font-size: 0.8125rem;
-        line-height: 1.5;
+        font-size: 0.75rem;
+        line-height: 1.45;
     }
 }
 
@@ -1111,9 +1148,23 @@
 
 /* Two-line caption box keeps every slide the same height */
 .vslider__caption {
+    flex: none;
     margin-top: 0.6rem;
     min-height: 3em;
     line-height: 1.5;
+}
+
+/* Fitted: each slide is half the matched height, the photograph fills what the caption leaves */
+.vslider.is-fitted .vslider__item {
+    display: flex;
+    flex-direction: column;
+    height: var(--slide-h);
+}
+
+.vslider.is-fitted .media {
+    flex: 1 1 auto;
+    min-height: 0;
+    aspect-ratio: auto;
 }
 
 .vslider__buttons {
