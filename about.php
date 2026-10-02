@@ -45,7 +45,7 @@ $values = site('values');
                     <article class="purpose__item surface-navy reveal">
                         <p class="label label--muted"><?= e($label) ?></p>
                         <h2 class="h3 purpose__title"><?= e(site($key . '.title')) ?></h2>
-                        <p class="muted"><?= e(site($key . '.text')) ?></p>
+                        <p class="muted purpose__text"><?= e(site($key . '.text')) ?></p>
                     </article>
                 <?php endforeach; ?>
             </div>

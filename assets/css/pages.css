@@ -665,6 +665,12 @@
     margin-block: var(--space-m);
 }
 
+.purpose__text {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    background: rgb(254 254 254 / 0.06);
+}
+
 @media (max-width: 767px) {
     .purpose__grid {
         grid-template-columns: minmax(0, 1fr);

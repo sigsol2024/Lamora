@@ -949,10 +949,9 @@
 }
 
 /*
- * Navy tone: Cream title, photograph framed inside its column at 16:9 (the
- * supplied photograph's own shape). It loads square-cornered, then its corners
- * close into a hexagon. The side points sit 16.24% in, which keeps 120-degree
- * corners at 16:9.
+ * Navy tone: Cream title; the photograph fills the right side to the viewport
+ * edge, top to bottom, and fades into the Navy on its left. It loads
+ * square-cornered, then its left edge closes into a hexagon point.
  */
 .hero-split--navy .hero-split__text .lead {
     color: var(--cream-muted);
@@ -963,50 +962,49 @@
 }
 
 .hero-split__pattern {
-    left: auto;
-    width: min(42%, 600px);
-    -webkit-mask-image: linear-gradient(to left, #000 10%, transparent);
-    mask-image: linear-gradient(to left, #000 10%, transparent);
+    right: auto;
+    width: min(40%, 560px);
+    -webkit-mask-image: linear-gradient(to right, #000 10%, transparent);
+    mask-image: linear-gradient(to right, #000 10%, transparent);
 }
 
 .hero-split--navy .container {
     position: relative;
 }
 
-.hero-split--navy .hero-split__grid {
-    align-items: center;
-}
-
 .hero-split--navy .hero-split__text {
+    position: relative;
+    z-index: 1;
     padding-block: clamp(2.5rem, 5vw, 4rem);
 }
 
-.hero-split__media--hex {
-    min-height: 0;
-    padding-block: clamp(2rem, 5vw, 4rem);
-}
-
 .hero-split__media--hex .media {
-    height: auto;
-    min-height: 0;
-    aspect-ratio: 16 / 9;
-    clip-path: polygon(16.24% 0, 83.76% 0, 100% 50%, 83.76% 100%, 16.24% 100%, 0 50%);
+    min-height: clamp(420px, 64vh, 680px);
+    clip-path: polygon(18% 0, 100% 0, 100% 100%, 18% 100%, 0 50%);
     animation: hero-hex 1400ms ease-in-out 500ms both;
 }
 
+.hero-split__media--hex .media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgb(7 33 99 / 0.85) 0%, rgb(7 33 99 / 0.45) 22%, rgb(7 33 99 / 0) 55%);
+    pointer-events: none;
+}
+
 @keyframes hero-hex {
-    from { clip-path: polygon(0 0, 100% 0, 100% 50%, 100% 100%, 0 100%, 0 50%); }
-    to   { clip-path: polygon(16.24% 0, 83.76% 0, 100% 50%, 83.76% 100%, 16.24% 100%, 0 50%); }
+    from { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%); }
+    to   { clip-path: polygon(18% 0, 100% 0, 100% 100%, 18% 100%, 0 50%); }
 }
 
 @media (max-width: 959px) {
-    .hero-split__media--hex {
-        margin-inline: 0;
-        padding-block: 0 var(--space-xl);
+    .hero-split__media--hex .media {
+        min-height: 0;
+        aspect-ratio: 4 / 3;
     }
 
-    .hero-split__media--hex .media {
-        aspect-ratio: 16 / 9;
+    .hero-split__media--hex .media::after {
+        background: linear-gradient(to bottom, rgb(7 33 99 / 0.75) 0%, rgb(7 33 99 / 0) 40%);
     }
 }
 

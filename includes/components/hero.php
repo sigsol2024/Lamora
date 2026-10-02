@@ -13,8 +13,9 @@
  * @var array|null  $actions  [['label', 'href', 'style' => 'primary'|'link', 'attrs' => []]]
  * @var string|null $title_class  Defaults to h1.
  * @var string|null $tone     'navy' (split): Navy field, Cream title, and the
- *                            photograph framed inside the column, its corners
- *                            closing into a hexagon on load.
+ *                            photograph filling the right side, fading into the
+ *                            Navy on its left, its left edge closing into a
+ *                            hexagon point on load.
  */
 $variant = $variant ?? 'plain';
 $actions = $actions ?? [];
@@ -53,8 +54,8 @@ $renderActions = static function (array $actions) use ($navy): void {
                     <?php if ($status): ?><p class="label hero-split__status"><?= e($status) ?></p><?php endif; ?>
                     <?php $renderActions($actions); ?>
                 </div>
-                <div class="hero-split__media span-6 start-7<?= $navy ? ' hero-split__media--hex' : ' bleed-right' ?>">
-                    <?= img($image, ['priority' => true, 'sizes' => $navy ? '(min-width: 960px) 45vw, 100vw' : '(min-width: 960px) 55vw, 100vw']) ?>
+                <div class="hero-split__media bleed-right<?= $navy ? ' span-7 start-6 hero-split__media--hex' : ' span-6 start-7' ?>">
+                    <?= img($image, ['priority' => true, 'sizes' => $navy ? '(min-width: 960px) 60vw, 100vw' : '(min-width: 960px) 55vw, 100vw']) ?>
                 </div>
             </div>
         </div>
