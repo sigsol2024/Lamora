@@ -16,6 +16,7 @@ $values = site('values');
 
     <?php component('hero', [
         'variant' => 'split',
+        'tone'    => 'navy',
         'image'   => 'about.hero',
         'label'   => 'About',
         'title'   => SITE_NAME,
@@ -28,16 +29,10 @@ $values = site('values');
 
     <!-- Positioning -->
     <section class="section positioning" aria-labelledby="positioning-title">
-        <div class="container">
-            <div class="grid">
-                <div class="span-7 reveal">
-                    <p class="label label--muted">Our position</p>
-                    <h2 class="display positioning__title" id="positioning-title"><?= e(copy_line('personal')) ?></h2>
-                </div>
-                <div class="span-4 start-9 align-end reveal">
-                    <p class="lead"><?= e(site('positioning.detail')) ?></p>
-                </div>
-            </div>
+        <div class="container positioning__inner reveal">
+            <p class="label label--muted">Our position</p>
+            <h2 class="display positioning__title" id="positioning-title"><?= e(copy_line('personal')) ?></h2>
+            <p class="lead positioning__text"><?= e(site('positioning.detail')) ?></p>
         </div>
     </section>
 
@@ -45,9 +40,9 @@ $values = site('values');
     <section class="section surface-mist purpose" aria-label="Vision and mission">
         <div class="hex-pattern purpose__pattern" aria-hidden="true"></div>
         <div class="container purpose__inner">
-            <div class="grid">
+            <div class="purpose__grid">
                 <?php foreach (['vision' => 'Vision', 'mission' => 'Mission'] as $key => $label): ?>
-                    <article class="span-5 <?= $key === 'mission' ? 'start-8' : '' ?> purpose__item reveal">
+                    <article class="purpose__item surface-navy reveal">
                         <p class="label label--muted"><?= e($label) ?></p>
                         <h2 class="h3 purpose__title"><?= e(site($key . '.title')) ?></h2>
                         <p class="muted"><?= e(site($key . '.text')) ?></p>
@@ -63,9 +58,9 @@ $values = site('values');
             <?php component('section-heading', [
                 'label' => 'Our values',
                 'title' => 'What we stand for.',
-                'id'    => 'values-title',
-                'split' => true,
-                'intro' => 'Six values shape how we host, whichever city you stay in.',
+                'id'     => 'values-title',
+                'center' => true,
+                'intro'  => 'Six values shape how we host, whichever city you stay in.',
             ]); ?>
             <ol class="values__list">
                 <?php foreach ($values as $i => $value): ?>

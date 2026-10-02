@@ -14,29 +14,34 @@
    ================================================================= */
 
 /* Tighter vertical rhythm on the homepage: 72px, 52px on tablets, 40px on phones */
-.page-home main {
+.page-home main,
+.page-about main {
     --section: 72px;
     --section-sm: 56px;
 }
 
-.page-home .section-head {
+.page-home .section-head,
+.page-about .section-head {
     margin-bottom: var(--space-l);
 }
 
 @media (max-width: 1023px) {
-    .page-home main {
+    .page-home main,
+    .page-about main {
         --section: 52px;
         --section-sm: 44px;
     }
 }
 
 @media (max-width: 480px) {
-    .page-home main {
+    .page-home main,
+    .page-about main {
         --section: 40px;
         --section-sm: 36px;
     }
 
-    .page-home .section-head {
+    .page-home .section-head,
+    .page-about .section-head {
         margin-bottom: var(--space-m);
     }
 }
@@ -605,13 +610,24 @@
 /* =================================================================
    About
    ================================================================= */
-.positioning__title {
-    margin-top: var(--space-m);
-    max-width: 11em;
+/* Our position: label, statement and detail stacked and centred */
+.positioning__inner {
+    display: grid;
+    justify-items: center;
+    text-align: center;
 }
 
-.positioning .lead {
+.positioning__title {
+    margin-top: var(--space-m);
+    max-width: 14em;
+    text-wrap: balance;
+}
+
+.positioning__text {
+    margin-top: var(--space-l);
+    max-width: 34em;
     color: var(--navy-muted);
+    text-wrap: balance;
 }
 
 .purpose {
@@ -630,8 +646,29 @@
     position: relative;
 }
 
+/* Vision and mission: two equal Navy cards, translucent over the hexagon field */
+.purpose__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gutter);
+}
+
+.purpose__item.surface-navy {
+    padding: clamp(1.75rem, 3.5vw, 3.25rem);
+    border-radius: var(--radius);
+    background: rgb(7 33 99 / 0.9);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
 .purpose__title {
     margin-block: var(--space-m);
+}
+
+@media (max-width: 767px) {
+    .purpose__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .values__list {

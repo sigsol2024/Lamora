@@ -586,6 +586,16 @@
     margin-top: var(--space-m);
 }
 
+.section-head--center {
+    justify-items: center;
+    text-align: center;
+}
+
+.section-head--center .section-head__intro {
+    max-width: 36em;
+    text-wrap: balance;
+}
+
 /* =================================================================
    Heroes
    ================================================================= */
@@ -935,6 +945,74 @@
     .hero-split__media .media {
         min-height: 0;
         aspect-ratio: 4 / 3;
+    }
+}
+
+/*
+ * Navy tone: Cream title, photograph framed inside its column at 16:9 (the
+ * supplied photograph's own shape). It loads square-cornered, then its corners
+ * close into a hexagon. The side points sit 16.24% in, which keeps 120-degree
+ * corners at 16:9.
+ */
+.hero-split--navy .hero-split__text .lead {
+    color: var(--cream-muted);
+}
+
+.hero-split--navy .link-arrow {
+    color: var(--cream);
+}
+
+.hero-split__pattern {
+    left: auto;
+    width: min(42%, 600px);
+    -webkit-mask-image: linear-gradient(to left, #000 10%, transparent);
+    mask-image: linear-gradient(to left, #000 10%, transparent);
+}
+
+.hero-split--navy .container {
+    position: relative;
+}
+
+.hero-split--navy .hero-split__grid {
+    align-items: center;
+}
+
+.hero-split--navy .hero-split__text {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
+.hero-split__media--hex {
+    min-height: 0;
+    padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+.hero-split__media--hex .media {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    clip-path: polygon(16.24% 0, 83.76% 0, 100% 50%, 83.76% 100%, 16.24% 100%, 0 50%);
+    animation: hero-hex 1400ms ease-in-out 500ms both;
+}
+
+@keyframes hero-hex {
+    from { clip-path: polygon(0 0, 100% 0, 100% 50%, 100% 100%, 0 100%, 0 50%); }
+    to   { clip-path: polygon(16.24% 0, 83.76% 0, 100% 50%, 83.76% 100%, 16.24% 100%, 0 50%); }
+}
+
+@media (max-width: 959px) {
+    .hero-split__media--hex {
+        margin-inline: 0;
+        padding-block: 0 var(--space-xl);
+    }
+
+    .hero-split__media--hex .media {
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-split__media--hex .media {
+        animation: none;
     }
 }
 
