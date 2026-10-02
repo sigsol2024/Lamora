@@ -976,6 +976,16 @@
     position: relative;
     z-index: 1;
     padding-block: clamp(2.5rem, 5vw, 4rem);
+    text-align: center;
+}
+
+.hero-split--navy .hero-split__text .lead {
+    margin-inline: auto;
+    max-width: 30em;
+}
+
+.hero-split--navy .actions {
+    justify-content: center;
 }
 
 .hero-split__media--hex .media {
@@ -997,15 +1007,23 @@
     to   { clip-path: polygon(18% 0, 100% 0, 100% 100%, 18% 100%, 0 50%); }
 }
 
+/* Stacked under the text, the point turns upright: the top edge closes instead */
 @media (max-width: 959px) {
     .hero-split__media--hex .media {
         min-height: 0;
         aspect-ratio: 4 / 3;
+        clip-path: polygon(0 22%, 50% 0, 100% 22%, 100% 100%, 0 100%);
+        animation-name: hero-hex-upright;
     }
 
     .hero-split__media--hex .media::after {
         background: linear-gradient(to bottom, rgb(7 33 99 / 0.75) 0%, rgb(7 33 99 / 0) 40%);
     }
+}
+
+@keyframes hero-hex-upright {
+    from { clip-path: polygon(0 0, 50% 0, 100% 0, 100% 100%, 0 100%); }
+    to   { clip-path: polygon(0 22%, 50% 0, 100% 22%, 100% 100%, 0 100%); }
 }
 
 @media (prefers-reduced-motion: reduce) {

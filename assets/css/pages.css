@@ -630,6 +630,14 @@
     text-wrap: balance;
 }
 
+@media (max-width: 767px) {
+    .positioning__text {
+        font-size: var(--fs-small);
+        line-height: 1.6;
+        text-wrap: pretty;
+    }
+}
+
 .purpose {
     position: relative;
     overflow: hidden;
