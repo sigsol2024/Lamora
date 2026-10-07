@@ -1,6 +1,6 @@
 <?php
 /**
- * Sticky secondary navigation for a location page, with a location switcher.
+ * Secondary navigation for a location page, with a location switcher.
  *
  * @var array $loc
  * @var array $links [['id', 'label']]
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <?php if (is_bookable($loc)): ?>
-                <a class="btn btn--small" href="<?= e(booking_url($loc)) ?>">Check availability</a>
+                <a class="btn btn--small" href="#booking">Check availability</a>
             <?php endif; ?>
         </div>
     </div>

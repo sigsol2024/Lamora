@@ -81,6 +81,7 @@ return [
 
     // Inner pages
     'about.hero'      => ['file' => 'placeholder/reception/silkwood-83.jpg', 'alt' => 'Timber panelling, shelving and a quiet table in a lounge', 'focus' => '45% 55%'],
+    'contact.hero'    => ['file' => 'placeholder/reception/silkwood-101.jpg', 'alt' => 'The arrival lounge, with soft seating and the glass entrance doors', 'focus' => '35% 55%'],
     'corporate.hero'  => ['file' => 'placeholder/meeting-space/silkwood-149.jpg', 'alt' => 'A meeting room prepared for a leadership session', 'focus' => '50% 55%'],
     'corporate.work'  => ['file' => 'placeholder/rooms/diplomatic-suite/silkwood-216.jpg', 'alt' => 'A suite work desk with lamp and chair', 'focus' => '60% 55%'],
 

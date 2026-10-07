@@ -1002,13 +1002,13 @@
     }
 }
 
-.hero-split__media--hex .media {
+.hero-split__media--hex > .media {
     min-height: clamp(420px, 64vh, 680px);
     clip-path: polygon(18% 0, 100% 0, 100% 100%, 18% 100%, 0 50%);
     animation: hero-hex 1400ms ease-in-out 500ms both;
 }
 
-.hero-split__media--hex .media::after {
+.hero-split__media--hex > .media::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -1023,14 +1023,14 @@
 
 /* Stacked under the text, the point turns upright: the top edge closes instead */
 @media (max-width: 959px) {
-    .hero-split__media--hex .media {
+    .hero-split__media--hex > .media {
         min-height: 0;
         aspect-ratio: 4 / 3;
         clip-path: polygon(0 22%, 50% 0, 100% 22%, 100% 100%, 0 100%);
         animation-name: hero-hex-upright;
     }
 
-    .hero-split__media--hex .media::after {
+    .hero-split__media--hex > .media::after {
         background: linear-gradient(to bottom, rgb(7 33 99 / 0.75) 0%, rgb(7 33 99 / 0) 40%);
     }
 }
@@ -1044,22 +1044,125 @@
     font-size: clamp(1.75rem, 2.7vw, 2.6rem);
 }
 
-/* Reverse: photograph on the left, so the point and the fade face right; fills the screen */
+/* Fit: fills the screen below the header on desktop */
 @media (min-width: 960px) {
-    .hero-split--reverse .hero-split__media--hex .media {
+    .hero-split--fit .hero-split__media--hex > .media {
         height: calc(100vh - var(--header-h) - var(--rule));
         height: calc(100svh - var(--header-h) - var(--rule));
-        min-height: 440px;
+        min-height: 380px;
+    }
+
+    /* Type and spacing scale with the screen height so the text never outgrows the photograph */
+    .hero-split--fit .hero-split__text {
+        align-self: center;
+        padding-block: clamp(1rem, 4vh, 3rem);
+    }
+
+    .hero-split--fit:not(.hero-split--reverse) .hero-split__text h1 {
+        font-size: clamp(1.9rem, min(4.2vw, 7vh), 4.25rem);
+    }
+
+    .hero-split--fit .hero-split__text .h1,
+    .hero-split--fit .hero-split__text .lead {
+        margin-top: clamp(0.75rem, 2.4vh, 1.5rem);
+    }
+
+    .hero-split--fit .hero-split__text .lead {
+        font-size: clamp(0.95rem, min(1.3vw, 2.5vh), 1.2rem);
+    }
+
+    .hero-split--fit .hero-split__status,
+    .hero-split--fit .hero-split__text .actions {
+        margin-top: clamp(1rem, 3.2vh, 2rem);
+    }
+}
+
+/* Slides: photographs crossfade inside the hexagon frame, easing out of a slight zoom */
+.hero-split__media[data-hero-slides] {
+    position: relative;
+}
+
+.hero-slides__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1200ms var(--ease);
+}
+
+.hero-slides__slide.is-active {
+    opacity: 1;
+}
+
+.hero-slides__slide .media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: auto;
+}
+
+.hero-slides__slide img {
+    transform: scale(1.06);
+    transition: transform 7000ms linear;
+}
+
+.hero-slides__slide.is-active img {
+    transform: scale(1);
+}
+
+/* Grouped on the right, vertically centred; centred along the bottom on phones */
+.hero-slides__nav {
+    position: absolute;
+    top: 50%;
+    right: var(--margin);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 959px) {
+    .hero-slides__nav {
+        top: auto;
+        right: 50%;
+        bottom: 1rem;
+        transform: translateX(50%);
+    }
+}
+
+.hero-slides__count {
+    margin-right: 0.5rem;
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--white);
+    text-shadow: 0 1px 6px rgb(7 33 99 / 0.6);
+}
+
+.hero-slides__nav .round-button {
+    width: 44px;
+    height: 44px;
+    background: rgb(7 33 99 / 0.45);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-slides__slide,
+    .hero-slides__slide img {
+        transition: none;
+        transform: none;
+    }
+}
+
+/* Reverse: photograph on the left, so the point and the fade face right */
+@media (min-width: 960px) {
+    .hero-split--reverse .hero-split__media--hex > .media {
         clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
         animation-name: hero-hex-reverse;
     }
 
-    .hero-split--reverse .hero-split__text {
-        align-self: center;
-        padding-block: clamp(1.5rem, 3vw, 3rem);
-    }
-
-    .hero-split--reverse .hero-split__media--hex .media::after {
+    .hero-split--reverse .hero-split__media--hex > .media::after {
         background: linear-gradient(to left, rgb(7 33 99 / 0.85) 0%, rgb(7 33 99 / 0.45) 22%, rgb(7 33 99 / 0) 55%);
     }
 
@@ -1077,13 +1180,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .hero-split--reverse .hero-split__media--hex .media {
+    .hero-split--reverse .hero-split__media--hex > .media {
         animation: none;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .hero-split__media--hex .media {
+    .hero-split__media--hex > .media {
         animation: none;
     }
 }
@@ -1968,8 +2071,7 @@ ul.rows > li {
    Location sub-navigation, switcher & mobile booking bar
    ================================================================= */
 .subnav {
-    position: sticky;
-    top: var(--header-h);
+    position: relative;
     z-index: 90;
     background: var(--white);
     border-bottom: var(--rule) solid var(--navy-line);
@@ -2110,7 +2212,12 @@ ul.rows > li {
 
 .booking-bar__text {
     display: grid;
+    min-width: 0;
     line-height: 1.3;
+}
+
+.booking-bar .btn {
+    flex: none;
 }
 
 .booking-bar__city {
@@ -2125,6 +2232,58 @@ ul.rows > li {
 
     .has-booking-bar {
         padding-bottom: 76px;
+    }
+}
+
+/* =================================================================
+   Back to top: appears once the visitor is 70% of the way down the page
+   ================================================================= */
+.to-top {
+    position: fixed;
+    right: clamp(16px, 2.5vw, 32px);
+    bottom: clamp(16px, 2.5vw, 32px);
+    z-index: 94;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: var(--rule) solid var(--cream-line);
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--cream);
+    box-shadow: 0 10px 24px -10px rgb(7 33 99 / 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 300ms var(--ease), transform 300ms var(--ease), visibility 0s linear 300ms;
+}
+
+.to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+}
+
+.to-top.is-visible:hover {
+    transform: translateY(-3px);
+}
+
+.to-top:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 3px;
+}
+
+@media (max-width: 959px) {
+    .has-booking-bar .to-top {
+        bottom: calc(76px + 16px + env(safe-area-inset-bottom));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .to-top {
+        transform: none;
+        transition: opacity 0s, visibility 0s;
     }
 }
 

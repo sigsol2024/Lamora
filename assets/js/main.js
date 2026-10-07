@@ -270,6 +270,33 @@
         update();
     });
 
+    /* ------------------------------------------------------------ Back to top */
+    const toTop = $('[data-to-top]');
+    if (toTop) {
+        const main = document.getElementById('main');
+        let ticking = false;
+        const update = () => {
+            ticking = false;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            toTop.classList.toggle('is-visible', max > 0 && window.scrollY / max >= 0.7);
+        };
+        window.addEventListener('scroll', () => {
+            if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+
+        toTop.addEventListener('click', (event) => {
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+            if (main) {
+                if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+                main.focus({ preventScroll: true });
+            }
+            toTop.blur();
+        });
+    }
+
     /* ------------------------------------------------------------ Shared autoplay
        Runs only while the slider is on screen and the tab is visible; pauses on
        hover, keyboard focus and touch, and waits after any manual interaction. */
@@ -300,6 +327,137 @@
 
         return { hold };
     };
+
+    /* ------------------------------------------------------------ Hero photograph slider */
+    $$('[data-hero-slides]').forEach((root) => {
+        const slides = $$('[data-hero-slide]', root);
+        const current = $('[data-hero-current]', root);
+        const prev = $('[data-hero-prev]', root);
+        const next = $('[data-hero-next]', root);
+        if (slides.length < 2 || !prev || !next) return;
+        let index = 0;
+
+        const show = (i) => {
+            index = (i + slides.length) % slides.length;
+            slides.forEach((slide, n) => {
+                const active = n === index;
+                slide.classList.toggle('is-active', active);
+                if (active) slide.removeAttribute('aria-hidden');
+                else slide.setAttribute('aria-hidden', 'true');
+            });
+            if (current) current.textContent = String(index + 1).padStart(2, '0');
+        };
+
+        const play = autoplay(root, 6000, () => show(index + 1));
+        prev.addEventListener('click', () => { show(index - 1); play.hold(10000); });
+        next.addEventListener('click', () => { show(index + 1); play.hold(10000); });
+    });
+
+    /* ------------------------------------------------------------ Overview coverflow
+       Each photograph gets a position relative to the front one (0); CSS turns
+       positions into the 3D arrangement. Side photographs can be clicked forward. */
+    $$('[data-coverflow]').forEach((root) => {
+        const items = $$('[data-coverflow-item]', root);
+        const current = $('[data-coverflow-current]', root);
+        const prev = $('[data-coverflow-prev]', root);
+        const next = $('[data-coverflow-next]', root);
+        const total = items.length;
+        if (total < 2 || !prev || !next) return;
+        let index = 0;
+
+        const show = (i) => {
+            index = (i + total) % total;
+            items.forEach((item, n) => {
+                let pos = (n - index + total) % total;
+                if (pos > total / 2) pos -= total;
+                item.dataset.pos = String(Math.max(-2, Math.min(2, pos)));
+                if (pos === 0) item.removeAttribute('aria-hidden');
+                else item.setAttribute('aria-hidden', 'true');
+            });
+            if (current) current.textContent = String(index + 1).padStart(2, '0');
+        };
+
+        const play = autoplay(root, 4000, () => show(index + 1));
+        const step = (by) => { show(index + by); play.hold(8000); };
+
+        prev.addEventListener('click', () => step(-1));
+        next.addEventListener('click', () => step(1));
+        items.forEach((item) => {
+            item.addEventListener('click', () => {
+                const pos = Number(item.dataset.pos);
+                if (pos === 1 || pos === -1) step(pos);
+            });
+        });
+
+        let startX = null;
+        root.addEventListener('touchstart', (event) => { startX = event.touches[0].clientX; }, { passive: true });
+        root.addEventListener('touchend', (event) => {
+            if (startX === null) return;
+            const dx = event.changedTouches[0].clientX - startX;
+            startX = null;
+            if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+        }, { passive: true });
+
+        show(0);
+    });
+
+    /* ------------------------------------------------------------ Booking calendar
+       Sends dates to the booking engine when one is configured; otherwise opens
+       an email to reservations with the request filled in. */
+    $$('[data-booking-form]').forEach((form) => {
+        const checkIn = $('[data-booking-in]', form);
+        const checkOut = $('[data-booking-out]', form);
+        if (!checkIn || !checkOut) return;
+
+        const addDay = (value) => {
+            const date = new Date(value + 'T00:00:00');
+            date.setDate(date.getDate() + 1);
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+        };
+
+        checkIn.addEventListener('change', () => {
+            if (!checkIn.value) return;
+            const earliest = addDay(checkIn.value);
+            checkOut.min = earliest;
+            if (!checkOut.value || checkOut.value < earliest) checkOut.value = earliest;
+        });
+
+        checkOut.addEventListener('input', () => checkOut.setCustomValidity(''));
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            checkOut.setCustomValidity(checkIn.value && checkOut.value && checkOut.value <= checkIn.value
+                ? 'Check-out must be after check-in.' : '');
+            if (!form.reportValidity()) return;
+
+            const data = new FormData(form);
+            const engine = form.dataset.engine;
+            if (engine) {
+                const target = new URL(engine, window.location.href);
+                data.forEach((value, key) => { if (value) target.searchParams.set(key, value); });
+                window.location.href = target.toString();
+                return;
+            }
+
+            const suiteSelect = form.elements.suite;
+            const suite = suiteSelect && suiteSelect.value ? suiteSelect.selectedOptions[0].textContent : 'Any suite';
+            const subject = `Availability enquiry – ${form.dataset.location}`;
+            const body = [
+                'Hello,',
+                '',
+                `Please confirm availability at ${form.dataset.location}:`,
+                '',
+                `Check-in: ${data.get('checkin')}`,
+                `Check-out: ${data.get('checkout')}`,
+                `Guests: ${data.get('guests')}`,
+                `Suite: ${suite}`,
+                '',
+                'Thank you.',
+            ].join('\n');
+            window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        });
+    });
 
     /* ------------------------------------------------------------ Corporate services slider */
     $$('[data-autoscroll]').forEach((slider) => {

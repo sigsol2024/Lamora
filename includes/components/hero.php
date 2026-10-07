@@ -18,6 +18,10 @@
  *                            hexagon point on load.
  * @var bool|null   $reverse  Navy tone only: photograph on the left, text on the
  *                            right on desktop (mobile is unchanged).
+ * @var array|null  $slides   Navy tone only: image slots shown as a crossfading
+ *                            slider inside the same hexagon frame, with
+ *                            previous/next controls on the photograph.
+ * @var bool|null   $fit      Fill the screen below the header on desktop.
  */
 $variant = $variant ?? 'plain';
 $actions = $actions ?? [];
@@ -25,6 +29,8 @@ $lead    = $lead ?? null;
 $status  = $status ?? null;
 $navy    = ($tone ?? null) === 'navy';
 $reverse = $navy && !empty($reverse);
+$slides  = $navy && !empty($slides) && count($slides) > 1 ? array_values($slides) : [];
+$fit     = !empty($fit) || $reverse;
 
 if ($reverse) {
     $textCols  = 'span-5 start-8 row-1';
@@ -57,7 +63,7 @@ $renderActions = static function (array $actions) use ($navy): void {
 };
 ?>
 <?php if ($variant === 'split'): ?>
-    <section class="hero-split<?= $navy ? ' hero-split--navy surface-navy' : '' ?><?= $reverse ? ' hero-split--reverse' : '' ?>" aria-labelledby="hero-title">
+    <section class="hero-split<?= $navy ? ' hero-split--navy surface-navy' : '' ?><?= $reverse ? ' hero-split--reverse' : '' ?><?= $fit ? ' hero-split--fit' : '' ?>" aria-labelledby="hero-title">
         <?php if ($navy): ?><div class="hex-pattern hex-pattern--cream hero-split__pattern" aria-hidden="true"></div><?php endif; ?>
         <div class="container">
             <div class="grid hero-split__grid">
@@ -68,9 +74,26 @@ $renderActions = static function (array $actions) use ($navy): void {
                     <?php if ($status): ?><p class="label hero-split__status"><?= e($status) ?></p><?php endif; ?>
                     <?php $renderActions($actions); ?>
                 </div>
-                <div class="hero-split__media <?= $mediaCols ?>">
-                    <?= img($image, ['priority' => true, 'sizes' => $navy ? '(min-width: 960px) 60vw, 100vw' : '(min-width: 960px) 55vw, 100vw']) ?>
-                </div>
+                <?php if ($slides): $count = count($slides); ?>
+                    <div class="hero-split__media <?= $mediaCols ?>" data-hero-slides>
+                        <div class="media hero-slides" role="group" aria-roledescription="carousel" aria-label="Photographs">
+                            <?php foreach ($slides as $i => $slot): ?>
+                                <div class="hero-slides__slide<?= $i === 0 ? ' is-active' : '' ?>" role="group" aria-roledescription="slide" aria-label="<?= $i + 1 ?> of <?= $count ?>"<?= $i === 0 ? '' : ' aria-hidden="true"' ?> data-hero-slide>
+                                    <?= img($slot, ['priority' => $i === 0, 'sizes' => '(min-width: 960px) 60vw, 100vw']) ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="hero-slides__nav">
+                            <span class="hero-slides__count figures" aria-hidden="true"><span data-hero-current>01</span> / <?= sprintf('%02d', $count) ?></span>
+                            <button class="round-button round-button--light" type="button" aria-label="Previous photograph" data-hero-prev><?= icon('arrow-left') ?></button>
+                            <button class="round-button round-button--light" type="button" aria-label="Next photograph" data-hero-next><?= icon('arrow-right') ?></button>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="hero-split__media <?= $mediaCols ?>">
+                        <?= img($image, ['priority' => true, 'sizes' => $navy ? '(min-width: 960px) 60vw, 100vw' : '(min-width: 960px) 55vw, 100vw']) ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>

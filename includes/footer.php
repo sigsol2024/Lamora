@@ -56,6 +56,8 @@
     </div>
 </footer>
 
+<a class="to-top" href="#main" aria-label="Back to top" data-to-top><?= icon('arrow-up', 'icon--s') ?></a>
+
 <?php component('book-dialog'); ?>
 </body>
 </html>

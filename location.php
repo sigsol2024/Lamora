@@ -15,7 +15,7 @@ $page = [
         ? 'The Lamora is coming to ' . $loc['city'] . '. Register your interest.'
         : ($loc['summary'] ?? ''),
     'slug'        => 'location',
-    'body_class'  => $comingSoon ? 'is-coming-soon' : 'has-booking-bar',
+    'body_class'  => $comingSoon ? 'is-coming-soon' : '',
 ];
 
 include INC . '/head.php';
@@ -67,52 +67,106 @@ include INC . '/header.php';
 
     <?php component('hero', [
         'variant' => 'split',
+        'tone'    => 'navy',
+        'fit'     => true,
         'image'   => $loc['slug'] . '.hero',
+        'slides'  => $loc['hero']['slides'] ?? [],
         'label'   => ($loc['district'] ?? '') . ', ' . $loc['city'],
         'title'   => location_name($loc),
         'lead'    => $loc['hero']['lead'] ?? null,
         'status'  => status_label($loc),
         'actions' => [
-            ['label' => 'Check availability', 'href' => booking_url($loc)],
+            ['label' => 'Check availability', 'href' => '#booking'],
             ['label' => 'Enquire', 'href' => url('contact') . '?location=' . rawurlencode($loc['slug']) . '#enquiry', 'style' => 'link'],
         ],
     ]); ?>
 
-    <?php if (!empty($loc['facts'])): ?>
-        <div class="container">
-            <dl class="facts">
-                <?php foreach ($loc['facts'] as $fact): ?>
-                    <div class="facts__item">
-                        <dt class="label label--muted"><?= e($fact['label']) ?></dt>
-                        <dd class="facts__value"><?= e($fact['value']) ?></dd>
-                    </div>
-                <?php endforeach; ?>
-            </dl>
-        </div>
-    <?php endif; ?>
-
     <?php
-    $links = [['id' => 'overview', 'label' => 'Overview'], ['id' => 'suites', 'label' => 'Suites']];
-    if (!empty($loc['outlets'])) $links[] = ['id' => 'dining', 'label' => 'Dining'];
-    if (!empty($loc['facilities'])) $links[] = ['id' => 'facilities', 'label' => 'Facilities'];
-    if (!empty($loc['address'])) $links[] = ['id' => 'location', 'label' => 'Location'];
-    if (!empty($loc['policies'])) $links[] = ['id' => 'good-to-know', 'label' => 'Good to know'];
-    component('location-subnav', ['loc' => $loc, 'links' => $links]);
+    // Booking calendar. Dates go to the booking engine when one is configured,
+    // otherwise into an email to reservations.
+    $opening   = $loc['dates']['soft_opening'] ?? null;
+    $minDate   = max(date('Y-m-d'), $opening ?? '');
+    $bookSuites = location_suites($loc);
     ?>
+    <section class="booking surface-mist" id="booking" aria-labelledby="booking-title">
+        <div class="container">
+            <form class="booking-form reveal" action="<?= e(booking_url($loc)) ?>" method="get" novalidate
+                  data-booking-form
+                  data-engine="<?= e(BOOKING_URLS[$loc['slug']] ?? '') ?>"
+                  data-email="<?= e($loc['contact']['email'] ?? site('contact.reservations')) ?>"
+                  data-location="<?= e(location_name($loc)) ?>">
+                <div class="booking-form__head">
+                    <h2 class="label label--muted" id="booking-title">Check availability</h2>
+                    <p class="small muted"><?= e(status_label($loc)) ?></p>
+                </div>
+                <label class="field">
+                    <span>Check-in</span>
+                    <input class="input" type="date" name="checkin" min="<?= e($minDate) ?>" required data-booking-in>
+                </label>
+                <label class="field">
+                    <span>Check-out</span>
+                    <input class="input" type="date" name="checkout" min="<?= e($minDate) ?>" required data-booking-out>
+                </label>
+                <label class="field">
+                    <span>Guests</span>
+                    <select class="select" name="guests">
+                        <?php for ($g = 1; $g <= 8; $g++): ?><option value="<?= $g ?>"<?= $g === 2 ? ' selected' : '' ?>><?= $g ?> <?= $g === 1 ? 'guest' : 'guests' ?></option><?php endfor; ?>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>Suite</span>
+                    <select class="select" name="suite">
+                        <option value="">Any suite</option>
+                        <?php foreach ($bookSuites as $s): ?><option value="<?= e($s['slug']) ?>"><?= e($s['name']) ?></option><?php endforeach; ?>
+                    </select>
+                </label>
+                <button class="btn booking-form__submit" type="submit">Check availability</button>
+            </form>
+
+            <?php if (!empty($loc['facts'])): ?>
+                <dl class="facts">
+                    <?php foreach ($loc['facts'] as $fact): ?>
+                        <div class="facts__item">
+                            <dt class="label label--muted"><?= e($fact['label']) ?></dt>
+                            <dd class="facts__value"><?= e($fact['value']) ?></dd>
+                        </div>
+                    <?php endforeach; ?>
+                </dl>
+            <?php endif; ?>
+        </div>
+    </section>
 
     <!-- Overview -->
     <section class="section overview" id="overview" aria-labelledby="overview-title">
         <div class="container">
-            <div class="grid">
-                <div class="span-6 reveal">
+            <div class="grid overview__grid">
+                <div class="span-5 overview__text reveal">
                     <p class="label label--muted">Overview</p>
                     <h2 class="h2 overview__title" id="overview-title"><?= e($loc['overview']['title']) ?></h2>
                     <div class="body-copy overview__body">
                         <?php foreach ($loc['overview']['body'] as $paragraph): ?><p><?= e($paragraph) ?></p><?php endforeach; ?>
                     </div>
                 </div>
-                <div class="span-5 start-8 offset-down reveal">
-                    <?= img($loc['slug'] . '.overview', ['ratio' => '4x5', 'sizes' => '(min-width: 960px) 38vw, 100vw']) ?>
+                <?php $overviewSlides = $loc['overview']['slides'] ?? [$loc['slug'] . '.overview']; ?>
+                <div class="span-7 start-6 overview__media reveal">
+                    <div class="coverflow" data-coverflow role="group" aria-roledescription="carousel" aria-label="Photographs of <?= e(location_name($loc)) ?>">
+                        <div class="coverflow__stage">
+                            <?php $slideCount = count($overviewSlides);
+                            foreach ($overviewSlides as $i => $slot):
+                                $pos = $i === 0 ? 0 : ($i === 1 ? 1 : ($i === $slideCount - 1 ? -1 : 2)); ?>
+                                <figure class="coverflow__item" data-coverflow-item data-pos="<?= $pos ?>"<?= $pos !== 0 ? ' aria-hidden="true"' : '' ?>>
+                                    <?= img($slot, ['ratio' => '4x5', 'sizes' => '(min-width: 960px) 24vw, 60vw']) ?>
+                                </figure>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php if (count($overviewSlides) > 1): ?>
+                            <div class="coverflow__nav">
+                                <button class="round-button" type="button" aria-label="Previous photograph" data-coverflow-prev><?= icon('arrow-left') ?></button>
+                                <span class="coverflow__count figures" aria-hidden="true"><span data-coverflow-current>01</span> / <?= sprintf('%02d', count($overviewSlides)) ?></span>
+                                <button class="round-button" type="button" aria-label="Next photograph" data-coverflow-next><?= icon('arrow-right') ?></button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,13 +180,12 @@ include INC . '/header.php';
                 'title' => $loc['suites_intro']['title'],
                 'id'    => 'suites-title',
                 'intro' => $loc['suites_intro']['text'],
-                'split' => true,
             ]); ?>
-            <div class="suite-grid">
-                <?php foreach (location_suites($loc) as $suite): if (!empty($suite['flagship'])) continue; ?>
-                    <?php component('suite-card', ['suite' => $suite]); ?>
-                <?php endforeach; ?>
-            </div>
+            <?php component('apartment-carousel', [
+                'suites' => array_values(array_filter(location_suites($loc), static fn ($s) => empty($s['flagship']))),
+                'id'     => 'suites-track',
+                'label'  => 'Apartments at ' . location_name($loc),
+            ]); ?>
         </div>
     </section>
 
@@ -164,14 +217,15 @@ include INC . '/header.php';
 
     <!-- In every suite -->
     <?php if (!empty($loc['suite_features'])): ?>
-        <section class="section features" aria-labelledby="features-title">
+        <section class="section features surface-navy" aria-labelledby="features-title">
+            <div class="hex-pattern hex-pattern--cream features__pattern" aria-hidden="true"></div>
             <div class="container">
-                <div class="grid">
-                    <div class="span-4 reveal">
+                <div class="grid features__grid">
+                    <div class="span-4 features__intro reveal">
                         <p class="label label--muted">In every suite</p>
                         <h2 class="h2 features__title" id="features-title">Residential comfort, hotel-grade servicing.</h2>
                         <div class="features__media">
-                            <?= img($loc['slug'] . '.detail', ['ratio' => '4x5', 'sizes' => '(min-width: 960px) 28vw, 100vw']) ?>
+                            <?= img($loc['slug'] . '.detail', ['sizes' => '(min-width: 960px) 28vw, 100vw']) ?>
                         </div>
                     </div>
                     <div class="span-7 start-6 reveal">
@@ -181,7 +235,7 @@ include INC . '/header.php';
                             <?php endforeach; ?>
                         </ul>
                         <div class="actions">
-                            <a class="btn" href="<?= e(booking_url($loc)) ?>">Check availability</a>
+                            <a class="btn btn--cream" href="#booking">Check availability</a>
                         </div>
                     </div>
                 </div>
@@ -198,7 +252,6 @@ include INC . '/header.php';
                     'title' => 'Three places to meet, dine and unwind.',
                     'id'    => 'dining-title',
                     'intro' => 'Contemporary Afro-Fusion dining, a discreet VIP Lounge and a relaxed Coffee Shop.',
-                    'split' => true,
                 ]); ?>
             </div>
             <?php
@@ -269,18 +322,13 @@ include INC . '/header.php';
     <?php endif; ?>
 
     <!-- Corporate advantage -->
-    <section class="section corporate-band surface-mist" aria-labelledby="corporate-title">
-        <div class="container">
-            <div class="grid">
-                <div class="span-3 reveal">
-                    <p class="label label--muted">Corporate advantage</p>
-                </div>
-                <div class="span-8 start-5 reveal">
-                    <p class="h3 corporate-band__statement" id="corporate-title"><?= e(site('corporate_advantage')) ?></p>
-                    <div class="actions">
-                        <a class="link-arrow" href="<?= e(url('corporate-stays')) ?>">Corporate and extended stays <?= icon('arrow-right') ?></a>
-                    </div>
-                </div>
+    <section class="section corporate-band surface-navy" aria-labelledby="corporate-title">
+        <div class="hex-pattern hex-pattern--cream corporate-band__pattern" aria-hidden="true"></div>
+        <div class="container corporate-band__inner reveal">
+            <h2 class="h2 corporate-band__title" id="corporate-title">Corporate advantage</h2>
+            <p class="corporate-band__statement"><?= e(site('corporate_advantage')) ?></p>
+            <div class="actions">
+                <a class="link-arrow" href="<?= e(url('corporate-stays')) ?>">Corporate and extended stays <?= icon('arrow-right') ?></a>
             </div>
         </div>
     </section>
@@ -359,14 +407,6 @@ include INC . '/header.php';
         'text'  => status_label($loc) . '. Speak to our reservations team about nightly, weekly and extended stays.',
         'loc'   => $loc,
     ]); ?>
-
-    <div class="booking-bar" aria-label="Book <?= e(location_name($loc)) ?>">
-        <div class="booking-bar__text">
-            <span class="booking-bar__city"><?= e(location_name($loc)) ?></span>
-            <span class="label label--muted"><?= e(status_label($loc)) ?></span>
-        </div>
-        <a class="btn btn--small" href="<?= e(booking_url($loc)) ?>">Check availability</a>
-    </div>
 
 <?php endif; ?>
 </main>

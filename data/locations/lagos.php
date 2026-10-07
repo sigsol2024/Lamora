@@ -20,14 +20,16 @@ return [
     'summary' => 'Luxury serviced apartments in Victoria Island, with the independence of a private residence and the service of an upscale hotel.',
 
     'hero' => [
-        'lead' => 'A premium luxury lifestyle apartment hotel delivering privacy, exclusivity and personalised hospitality in the heart of Victoria Island.',
+        'lead'   => 'A premium luxury lifestyle apartment hotel delivering privacy, exclusivity and personalised hospitality in the heart of Victoria Island.',
+        'slides' => ['lagos.hero', 'lagos.presidential-living', 'lagos.pool', 'lagos.restaurant', 'lagos.terrace'],
     ],
 
     'overview' => [
-        'title' => 'Contemporary luxury. Personalised hospitality. The heart of Lagos.',
+        'title'  => 'Contemporary luxury. Personalised hospitality.',
+        'slides' => ['lagos.overview', 'lagos.vip-lounge', 'lagos.three-bed-living', 'lagos.coffee-shop', 'lagos.one-bed-bedroom'],
         'body'  => [
             'The Lamora Lagos is a contemporary luxury serviced apartment hotel in Victoria Island, one of Lagos\' foremost commercial, diplomatic and lifestyle districts.',
-            'It combines the independence and residential comfort of a private apartment with the professional service standards of an upscale hotel. Thirty-one serviced suites, from Studio Suites to a four-bedroom Presidential Suite, give guests more space and privacy than conventional hotel accommodation.',
+            'It combines the independence and residential comfort of a private apartment with the professional service standards of an upscale hotel.',
         ],
     ],
 

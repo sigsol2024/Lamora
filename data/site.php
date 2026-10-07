@@ -17,6 +17,7 @@ return [
     'contact' => [
         'info'         => 'info@thelamora.com',
         'reservations' => 'reservations@thelamora.com',
+        'sales'        => 'sales@thelamora.com',
     ],
 
     // Icon ids refer to assets/icons/sprite.svg.
